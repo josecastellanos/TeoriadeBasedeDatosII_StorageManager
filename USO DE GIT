@@ -1,0 +1,5 @@
+GIT PULL
+
+GIT add *
+git commit -m 'Jaime is online'
+git push 
