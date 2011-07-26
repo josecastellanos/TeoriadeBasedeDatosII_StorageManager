@@ -13,6 +13,7 @@
 class Metadata : public Block {
 public:
     Metadata(unsigned int blockID, unsigned int ant, unsigned int sig, const char* type);
+
 private:
 
 };

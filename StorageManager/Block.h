@@ -8,20 +8,25 @@
 #ifndef BLOCK_H
 #define	BLOCK_H
 
-#include <stdio.h>
 #include <string.h>
+#include <fstream>
+#include <iostream>
+#include <cstdlib>
 
-typedef struct
+using namespace std;
+
+class Header
 {
+public:
     unsigned int blockID;
     unsigned int ant;
     unsigned int sig;
-    char type[3];
-}header;
+    char type[4];
+};
 
 class Block {
 public:
-    header Header;
+    Header header;
     Block(unsigned int blockID, unsigned int ant, unsigned int sig, const char *type);
 private:
 

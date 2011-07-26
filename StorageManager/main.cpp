@@ -10,8 +10,9 @@
 #include <iostream>
 #include <string.h>
 
-#include "Block.h"
 #include "Metadata.h"
+#include "SystemBlock.h"
+#include "StorageManager.h"
 
 using namespace std;
 
@@ -20,7 +21,10 @@ using namespace std;
  */
 int main(int argc, char** argv) {
     Metadata a(1,2,4,"MD");
-    cout<<a.Header.type<<" "<<sizeof(a.Header.type)<<" "<<strlen(a.Header.type)<<" "<<sizeof(header);
+    SystemBlock cp;
+    cout<<sizeof(InfoSB)<<" "<<sizeof(SystemBlock);
+    StorageManager b;
+    b.createTableSpace("jj","1.3.4","123","/home/rsiwady29/",80);
     system("pause");
     return 0;
 }

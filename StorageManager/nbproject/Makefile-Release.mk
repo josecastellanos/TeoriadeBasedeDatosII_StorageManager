@@ -36,6 +36,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/Block.o \
 	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/SystemBlock.o \
+	${OBJECTDIR}/StorageManager.o \
 	${OBJECTDIR}/Metadata.o
 
 
@@ -72,6 +74,16 @@ ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
+
+${OBJECTDIR}/SystemBlock.o: SystemBlock.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/SystemBlock.o SystemBlock.cpp
+
+${OBJECTDIR}/StorageManager.o: StorageManager.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/StorageManager.o StorageManager.cpp
 
 ${OBJECTDIR}/Metadata.o: Metadata.cpp 
 	${MKDIR} -p ${OBJECTDIR}
