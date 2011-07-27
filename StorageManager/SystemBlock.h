@@ -9,6 +9,7 @@
 #define	SYSTEMBLOCK_H
 
 #include "Block.h"
+#include <string>
 
 class InfoSB
 {
@@ -23,7 +24,10 @@ public:
 class SystemBlock : public Block {
 public:
     InfoSB info;
+    char* path;
     SystemBlock();
+    //void SystemBlock(const char* path);
+    unsigned int getFree();
     
 private:
 

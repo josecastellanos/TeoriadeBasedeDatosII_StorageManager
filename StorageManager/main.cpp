@@ -24,7 +24,19 @@ int main(int argc, char** argv) {
     SystemBlock cp;
     cout<<sizeof(InfoSB)<<" "<<sizeof(SystemBlock);
     StorageManager b;
-    b.createTableSpace("jj","1.3.4","123","/home/rsiwady29/",80);
+    b.createTableSpace("jj","1.3.4","123","/home/mairen/",80);
+    SystemBlock mySystemBlock;
+    
+    mySystemBlock.path="/home/mairen/jj.dat";
+    
+    for (int i=0;i<6;i++)
+    {
+        cout<<"Libre que se Devuelve "<<mySystemBlock.getFree()<<endl;
+        //cout<<"Libre que se Devuelve "<<mySystemBlock.getFree();
+    }
+    
+    system("pause");
+    system("pause");
     system("pause");
     return 0;
 }
