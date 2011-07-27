@@ -34,11 +34,11 @@ int main(int argc, char** argv) {
         cout<<"Libre que se Devuelve "<<mySystemBlock.getFree()<<endl;
         //cout<<"Libre que se Devuelve "<<mySystemBlock.getFree();
     }
+    cout<<"ULTIMO TEST";
+    system("pause");
+    system("pause");
+    system("pause");
     
-    system("pause");
-    system("pause");
-    system("pause");
-    cout<<"TESTING GIT";
     return 0;
 }
 
