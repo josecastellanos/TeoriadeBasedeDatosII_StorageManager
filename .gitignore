@@ -1,5 +1,8 @@
-/StorageManager/build/**/*
-/StorageManager/dist/**/*
-/StorageManager/nbproject/**/*
-/StorageManager/Makefile
-/StorageManager/.deb.inc
+*.o
+*.o.d
+*.exe
+*.xml
+*.mk
+*.properties
+*.bash
+*.deb.inc
