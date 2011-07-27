@@ -6,19 +6,14 @@
  */
 
 #include "StorageManager.h"
-
+#define path "tablespace.dat"
 StorageManager::StorageManager()
 {    
 }
 
-void StorageManager::createTableSpace(const char* nombreBD, const char* version, const char* clave, const char* direccion, unsigned int cantBloques) {
+void StorageManager::createTableSpace(const char* nombreBD, const char* version, const char* clave, unsigned int cantBloques) {
     if (cantBloques > 1) {
         fstream disco;
-
-        char path[strlen(direccion) + strlen(nombreBD) + 4];
-        strcpy(path, direccion);
-        strcat(path, nombreBD);
-        strcat(path, ".dat");
 
         disco.open(path, ios::binary | ios::in);
         if (!disco) {

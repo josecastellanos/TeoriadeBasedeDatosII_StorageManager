@@ -15,7 +15,7 @@ class StorageManager {
 public:
     StorageManager();
     //static string getPath();
-    void createTableSpace(const char* nombreBD,const char* version ,const char* clave,const char* direccion,unsigned int cantBloques);
+    void createTableSpace(const char* nombreBD,const char* version ,const char* clave, unsigned int cantBloques);
         
 private:
 
