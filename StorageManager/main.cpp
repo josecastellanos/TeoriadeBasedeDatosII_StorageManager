@@ -24,10 +24,10 @@ int main(int argc, char** argv) {
     SystemBlock cp;
     cout<<sizeof(InfoSB)<<" "<<sizeof(SystemBlock);
     StorageManager b;
-    b.createTableSpace("jj","1.3.4","123","/home/mairen/",80);
+    b.createTableSpace("jj","1.3.4","123","/home/",80);
     SystemBlock mySystemBlock;
     
-    mySystemBlock.path="/home/mairen/jj.dat";
+    strcpy(mySystemBlock.path,"/home/jj.dat");
     
     for (int i=0;i<6;i++)
     {

@@ -12,6 +12,14 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>Block.cpp</itemPath>
+      <itemPath>Block.h</itemPath>
+      <itemPath>Metadata.cpp</itemPath>
+      <itemPath>Metadata.h</itemPath>
+      <itemPath>StorageManager.cpp</itemPath>
+      <itemPath>StorageManager.h</itemPath>
+      <itemPath>SystemBlock.cpp</itemPath>
+      <itemPath>SystemBlock.h</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
