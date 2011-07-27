@@ -38,6 +38,7 @@ int main(int argc, char** argv) {
     system("pause");
     system("pause");
     system("pause");
+    cout<<"TESTING GIT";
     return 0;
 }
 
