@@ -7,6 +7,7 @@
 
 #include "Metadata.h"
 
-Metadata::Metadata(unsigned int blockID, unsigned int ant, unsigned int sig, const char* type) 
-: Block(blockID, ant, sig, type){
+Metadata::Metadata() 
+: Block(0, 0, 0, "BB"){
+    
 }

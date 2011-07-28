@@ -15,24 +15,25 @@ public:
     char nombreTabla[50];
     unsigned int cant_campos;
     unsigned int cont_MD;
-    unsigned int inic_BD;
+    unsigned int inicio_BD;
+    unsigned int ultimo_BD;
 };
 
 class InfoMDC{
 public:
-    char tipo_campo[20];
+    unsigned short tipo_campo;
     char nombre_campo[30];
     unsigned int escala;
     unsigned int precision;
     bool nulls;
     bool PK;
-    bool DEFAULT;
+    char DEFAULT[30];
     
 };
 
 class Metadata : public Block {
 public:
-    Metadata(unsigned int blockID, unsigned int ant, unsigned int sig, const char* type);
+    Metadata();
     
     InfoMD info;
 private:
