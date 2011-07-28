@@ -10,13 +10,14 @@
 
 #include <string>
 #include "SystemBlock.h"
+#include "Metadata.h"
 
 class StorageManager {
 public:
     StorageManager();
     //static string getPath();
-    void createTableSpace(const char* nombreBD,const char* version ,const char* clave, unsigned int cantBloques);
-        
+    void createTableSpace(const char* nombreBD, const char* version, const char* clave, unsigned int cantBloques);
+    void createTable(const char* nombreTabla, int cantCampos);
 private:
 
 };

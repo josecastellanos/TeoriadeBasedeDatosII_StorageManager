@@ -18,6 +18,7 @@ public:
     char version[8];
     char clave[16];
     unsigned int primerBMD;
+    unsigned int ultimoBMD;
     unsigned int primerLibre;
 };
 

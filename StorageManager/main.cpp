@@ -19,6 +19,8 @@ using namespace std;
 /*
  * 
  */
+
+
 int main(int argc, char** argv) {
     Metadata a(1,2,4,"MD");
     SystemBlock cp;
@@ -27,15 +29,21 @@ int main(int argc, char** argv) {
     b.createTableSpace("jj","1.3.4","123",10000);
     SystemBlock mySystemBlock;
         
-    for (int i=0;i<6;i++)
+    /*for (int i=0;i<6;i++)
     {
         cout<<"Libre que se Devuelve "<<mySystemBlock.getFree()<<endl;
         //cout<<"Libre que se Devuelve "<<mySystemBlock.getFree();
-    }
+    }*/
+    
+    
+
+    
+    
+    
+    b.createTable("cailo,",3);
+    
     cout<<"TTTTTTT test de Git TTTTTTTT";
-    system("pause");
-    system("pause");
-    system("pause");
+
     
     return 0;
 }
