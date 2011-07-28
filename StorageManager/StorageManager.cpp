@@ -7,6 +7,7 @@
 
 #include "StorageManager.h"
 #define path "tablespace.dat"
+
 StorageManager::StorageManager()
 {    
 }
@@ -20,14 +21,26 @@ void StorageManager::createTableSpace(const char* nombreBD, const char* version,
             return;
         }
 
-        SystemBlock SB;       
-        SB.info.primerBMD = 0;
-        SB.info.ultimoBMD =0;
-        SB.info.primerLibre = 1;
-        strcpy(SB.info.nombreBD, nombreBD);
-        strcpy(SB.info.version, version);
-        strcpy(SB.info.clave, clave);
-        disco.write((const char*) &SB, sizeof (SystemBlock));
+        Header header;
+        
+        header.blockID=0;
+        header.ant=0;
+        header.sig=1;
+        strcpy(header.type, "SB");
+        
+        InfoSB info;
+       
+        info.primerBMD = 0;
+        info.ultimoBMD =0;
+        info.primerLibre = 1;
+        strcpy(info.nombreBD, nombreBD);
+        strcpy(info.version, version);
+        strcpy(info.clave, clave);
+                
+        disco.write((const char*) &header, sizeof(Header));
+        disco.flush();
+        
+        disco.write((const char*) &info, sizeof(SystemBlock));
         disco.flush();
 
         unsigned int tam = 4096 - sizeof (SystemBlock);
