@@ -15,20 +15,18 @@ void StorageManager::createTableSpace(const char* nombreBD, const char* version,
     if (cantBloques > 1) {
         fstream disco;
 
-        disco.open(path, ios::binary | ios::in);
+        disco.open(path, ios::binary | ios::out);
         if (!disco) {
-            disco.open(path, ios::binary | ios::out);
-        } else {
-            disco.open(path, ios::binary | ios::in | ios::out);
+            return;
         }
 
         SystemBlock SB;       
         SB.info.primerBMD = 0;
+        SB.info.ultimoBMD =0;
         SB.info.primerLibre = 1;
         strcpy(SB.info.nombreBD, nombreBD);
         strcpy(SB.info.version, version);
         strcpy(SB.info.clave, clave);
-        
         disco.write((const char*) &SB, sizeof (SystemBlock));
         disco.flush();
 
@@ -38,6 +36,7 @@ void StorageManager::createTableSpace(const char* nombreBD, const char* version,
         memset(rellenoSB, 0, tam);
 
         disco.write((const char*) &rellenoSB, tam);
+        
         disco.flush();
 
         tam = 4096 - sizeof (Block);
@@ -65,38 +64,44 @@ void StorageManager::createTableSpace(const char* nombreBD, const char* version,
 void StorageManager::createTable(const char* nombreTabla,int cantCampos){
     fstream disco;
     
-    disco.open(path, ios::binary | ios::in);
+    disco.open(path, ios::binary | ios::in | ios::out);
         if (!disco) {
-            disco.open(path, ios::binary | ios::out);
-        } else {
-            disco.open(path, ios::binary | ios::in | ios::out);
+            return;
         }
     
-    unsigned int offset = sizeof(Header);
-   // disco.seekg(offset);
+    unsigned int offset = 0;
+
     SystemBlock SB;
-    
-    //disco.read((char*) &SB, sizeof(SystemBlock));
+
     int libre_pos = SB.getFree();
-    offset = 4096*libre_pos;
-    Metadata m(libre_pos,0,0,"MD");
     
+    if(libre_pos != 0){
+    
+    if(SB.getPrimerMD()== 0){
+        SB.setPrimerMD(libre_pos);
+    }
+    
+    offset = 4096*libre_pos;
+    Metadata m(libre_pos,SB.getUltimoMD(),0,"MD");
+    SB.setUltimoMD(libre_pos);
     strcpy(m.info.nombreTabla, nombreTabla);
     m.info.cont_MD = 0;
     m.info.inic_BD = 0;
     m.info.cant_campos = cantCampos;
-    
     disco.seekp(offset);
     disco.write((const char*) &m.header, sizeof (Block));
+    
+    disco.flush();
     disco.write((const char*) &m.info, sizeof (InfoMD));
     disco.flush();
-    
-    
-    
-    
-    
-    
-    cout<<"Libre que se Devuelve "<<libre_pos<<" fin "<<endl;
+
+    SB.acomodarPrimerLibre();
+        
+    disco.close();
+    }else{
+        disco.close();
+        return;
+    }
     
     
 }

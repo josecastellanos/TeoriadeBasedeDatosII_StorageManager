@@ -30,6 +30,10 @@ public:
     //void SystemBlock(const char* path);
     unsigned int getFree();
     void acomodarPrimerLibre();
+    unsigned int getUltimoMD();
+    unsigned int getPrimerMD();
+    void setPrimerMD(unsigned int MD);
+    void setUltimoMD(unsigned int MD);
     
 private:
 

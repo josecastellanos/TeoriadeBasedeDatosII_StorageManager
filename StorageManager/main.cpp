@@ -22,28 +22,11 @@ using namespace std;
 
 
 int main(int argc, char** argv) {
-    Metadata a(1,2,4,"MD");
+   
     SystemBlock cp;
-    cout<<sizeof(InfoSB)<<" "<<sizeof(SystemBlock);
     StorageManager b;
-    b.createTableSpace("jj","1.3.4","123",10000);
-    SystemBlock mySystemBlock;
-        
-    /*for (int i=0;i<6;i++)
-    {
-        cout<<"Libre que se Devuelve "<<mySystemBlock.getFree()<<endl;
-        //cout<<"Libre que se Devuelve "<<mySystemBlock.getFree();
-    }*/
-    
-    
-
-    
-    
-    
-    b.createTable("cailo,",3);
-    
-    cout<<"TTTTTTT test de Git TTTTTTTT";
-
+    b.createTableSpace("jj","777","555",50);
+    b.createTable("cailo",3);
     
     return 0;
 }

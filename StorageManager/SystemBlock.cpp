@@ -105,3 +105,118 @@ void SystemBlock::acomodarPrimerLibre()
         /*   Codigo en Revision  */
         disco.close();  
 }
+unsigned int SystemBlock::getUltimoMD()
+{    
+    fstream disco;
+    //Abro el archivo, sino se puede retorno 0
+    disco.open(path, ios::binary | ios::in | ios::out);
+    //disco.open("/home/mairen/jj.dat", ios::binary | ios::in | ios::out);
+    
+    if (!disco) {
+        return 0;
+    }
+    //Avanzo hasta despues del Header
+    unsigned int offset = sizeof(Header);
+    disco.seekg(offset);
+    
+    //Leo la Info del bloque se Sistema
+    InfoSB myinfo;        
+    disco.read((char*) &myinfo, sizeof(InfoSB));
+    
+    disco.close();
+      
+       //Return al valor del PrimerLibre, 
+        return myinfo.ultimoBMD; 
+         
+        
+}
+
+void SystemBlock::setUltimoMD(unsigned int MD){
+     fstream disco;
+    //Abro el archivo, sino se puede retorno 0
+    disco.open(path, ios::binary | ios::in | ios::out);
+    //disco.open("/home/mairen/jj.dat", ios::binary | ios::in | ios::out);
+    
+    if (!disco) {
+        return;
+    }
+    //Avanzo hasta despues del Header
+    unsigned int offset = sizeof(Header);
+    disco.seekg(offset);
+    
+    //Leo la Info del bloque se Sistema
+    InfoSB myinfo;        
+    disco.read((char*) &myinfo, sizeof(InfoSB));
+
+
+        
+        //Actualizo el PrimerLibre con el id del nuevo libre
+        myinfo.ultimoBMD= MD;
+        //Offset para escribir la actualizacion del PrimerLibre
+        //en el SystemBlock.
+        offset = sizeof(Header);
+        disco.seekp(offset);
+        disco.write((const char*) &myinfo, sizeof(InfoSB));
+        disco.flush();
+       
+        disco.close();  
+    
+}
+
+void SystemBlock::setPrimerMD(unsigned int MD){
+     fstream disco;
+    //Abro el archivo, sino se puede retorno 0
+    disco.open(path, ios::binary | ios::in | ios::out);
+    //disco.open("/home/mairen/jj.dat", ios::binary | ios::in | ios::out);
+    
+    if (!disco) {
+        return;
+    }
+    //Avanzo hasta despues del Header
+    unsigned int offset = sizeof(Header);
+    disco.seekg(offset);
+    
+    //Leo la Info del bloque se Sistema
+    InfoSB myinfo;        
+    disco.read((char*) &myinfo, sizeof(InfoSB));
+
+
+        
+        //Actualizo el PrimerLibre con el id del nuevo libre
+        myinfo.primerBMD= MD;
+        //Offset para escribir la actualizacion del PrimerLibre
+        //en el SystemBlock.
+        offset = sizeof(Header);
+        disco.seekp(offset);
+        disco.write((const char*) &myinfo, sizeof(InfoSB));
+        disco.flush();
+       
+        disco.close();  
+    
+}
+
+unsigned int SystemBlock::getPrimerMD()
+{    
+    fstream disco;
+    //Abro el archivo, sino se puede retorno 0
+    disco.open(path, ios::binary | ios::in | ios::out);
+    //disco.open("/home/mairen/jj.dat", ios::binary | ios::in | ios::out);
+    
+    if (!disco) {
+        return 0;
+    }
+    //Avanzo hasta despues del Header
+    unsigned int offset = sizeof(Header);
+    disco.seekg(offset);
+    
+    //Leo la Info del bloque se Sistema
+    InfoSB myinfo;        
+    disco.read((char*) &myinfo, sizeof(InfoSB));
+    
+    disco.close();
+      
+       //Return al valor del PrimerLibre, 
+        return myinfo.primerBMD; 
+         
+        
+}
