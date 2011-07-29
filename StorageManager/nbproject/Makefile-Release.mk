@@ -37,6 +37,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Block.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/SystemBlock.o \
+	${OBJECTDIR}/MetadataContinuo.o \
 	${OBJECTDIR}/StorageManager.o \
 	${OBJECTDIR}/Metadata.o
 
@@ -79,6 +80,11 @@ ${OBJECTDIR}/SystemBlock.o: SystemBlock.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/SystemBlock.o SystemBlock.cpp
+
+${OBJECTDIR}/MetadataContinuo.o: MetadataContinuo.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/MetadataContinuo.o MetadataContinuo.cpp
 
 ${OBJECTDIR}/StorageManager.o: StorageManager.cpp 
 	${MKDIR} -p ${OBJECTDIR}

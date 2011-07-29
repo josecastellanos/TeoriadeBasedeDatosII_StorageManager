@@ -16,6 +16,8 @@
       <itemPath>Block.h</itemPath>
       <itemPath>Metadata.cpp</itemPath>
       <itemPath>Metadata.h</itemPath>
+      <itemPath>MetadataContinuo.cpp</itemPath>
+      <itemPath>MetadataContinuo.h</itemPath>
       <itemPath>StorageManager.cpp</itemPath>
       <itemPath>StorageManager.h</itemPath>
       <itemPath>SystemBlock.cpp</itemPath>
