@@ -9,6 +9,7 @@
 #define	METADATA_H
 
 #include "Block.h"
+#include "SystemBlock.h"
 
 class InfoMD{
 public:
@@ -34,7 +35,10 @@ public:
 class Metadata : public Block {
 public:
     Metadata();
-    
+    Metadata(const char* nombreTabla, unsigned int cant_campos);
+    Metadata(unsigned int Bloque_id);
+    void escribir();
+   
     InfoMD info;
 private:
 

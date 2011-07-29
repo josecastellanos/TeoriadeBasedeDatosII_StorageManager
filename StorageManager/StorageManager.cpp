@@ -7,7 +7,6 @@
 
 #include "StorageManager.h"
 #define path "tablespace.dat"
-
 StorageManager::StorageManager()
 {    
 }
@@ -21,26 +20,14 @@ void StorageManager::createTableSpace(const char* nombreBD, const char* version,
             return;
         }
 
-        Header header;
-        
-        header.blockID=0;
-        header.ant=0;
-        header.sig=1;
-        strcpy(header.type, "SB");
-        
-        InfoSB info;
-       
-        info.primerBMD = 0;
-        info.ultimoBMD =0;
-        info.primerLibre = 1;
-        strcpy(info.nombreBD, nombreBD);
-        strcpy(info.version, version);
-        strcpy(info.clave, clave);
-                
-        disco.write((const char*) &header, sizeof(Header));
-        disco.flush();
-        
-        disco.write((const char*) &info, sizeof(SystemBlock));
+        SystemBlock SB;       
+        SB.info.primerBMD = 0;
+        SB.info.ultimoBMD =0;
+        SB.info.primerLibre = 1;
+        strcpy(SB.info.nombreBD, nombreBD);
+        strcpy(SB.info.version, version);
+        strcpy(SB.info.clave, clave);
+        disco.write((const char*) &SB, sizeof (SystemBlock));
         disco.flush();
 
         unsigned int tam = 4096 - sizeof (SystemBlock);
@@ -74,47 +61,25 @@ void StorageManager::createTableSpace(const char* nombreBD, const char* version,
     }
 }
 
-void StorageManager::createTable(const char* nombreTabla,int cantCampos){
+void StorageManager::createTable(const char* nombreTabla, unsigned int cant_campos, InfoMDC* campos){
+    Metadata metadata(nombreTabla,cant_campos);
+    metadata.escribir();
     fstream disco;
-    
     disco.open(path, ios::binary | ios::in | ios::out);
-        if (!disco) {
-            return;
-        }
-    
-    unsigned int offset = 0;
-
-    SystemBlock SB;
-
-    int libre_pos = SB.getFree();
-    
-    if(libre_pos != 0){
-    
-    if(SB.getPrimerMD()== 0){
-        SB.setPrimerMD(libre_pos);
-    }
-    
-    offset = 4096*libre_pos;
-    Metadata m(libre_pos,SB.getUltimoMD(),0,"MD");
-    SB.setUltimoMD(libre_pos);
-    strcpy(m.info.nombreTabla, nombreTabla);
-    m.info.cont_MD = 0;
-    m.info.inic_BD = 0;
-    m.info.cant_campos = cantCampos;
-    disco.seekp(offset);
-    disco.write((const char*) &m.header, sizeof (Block));
-    
-    disco.flush();
-    disco.write((const char*) &m.info, sizeof (InfoMD));
-    disco.flush();
-
-    SB.acomodarPrimerLibre();
-        
-    disco.close();
-    }else{
-        disco.close();
+    if (!disco) {
         return;
     }
+    unsigned int offset = (metadata.header.blockID * 4096)+sizeof(Header)+sizeof(InfoMD);
+    int temp = (4096-sizeof(Header)-sizeof(InfoMD))/sizeof(InfoMDC);
     
-    
+    disco.seekp(offset);
+    for(int i=0;i<cant_campos;i++){
+        if(i<temp){
+           disco.write((const char*) &campos[i], sizeof(InfoMDC)); 
+        }else{
+            
+        }
+        
+    }
 }
+
