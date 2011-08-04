@@ -30,6 +30,8 @@ public:
     Block(unsigned int blockID, unsigned int ant, unsigned int sig, const char* type);
     void setAnt(unsigned int ant);
     void setSig(unsigned int sig);
+    virtual void escribir() = 0;
+    virtual unsigned int getEspacioDisponible(); 
 private:
 
 };
