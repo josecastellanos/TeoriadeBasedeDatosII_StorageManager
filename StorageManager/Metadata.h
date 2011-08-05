@@ -15,7 +15,8 @@ class InfoMD{
 public:
     char nombreTabla[50];
     unsigned int cant_campos;
-    unsigned int cont_MD;
+    unsigned int inicio_MDCont;
+    unsigned int final_MDCont;
     unsigned int inicio_BD;
     unsigned int ultimo_BD;
 };
@@ -34,9 +35,9 @@ public:
 
 class Metadata : public Block {
 public:
-    Metadata();
     Metadata(const char* nombreTabla, unsigned int cant_campos);
     Metadata(unsigned int Bloque_id);
+    unsigned int getFinal_MDCont();
     virtual void escribir();
     virtual unsigned int getEspacioDisponible();
    

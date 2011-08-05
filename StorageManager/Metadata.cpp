@@ -8,15 +8,15 @@
 #include "Metadata.h"
 #define path "tablespace.dat"
 
-Metadata::Metadata()
-:Block(0, 0, 0, "MDB") {
-
+Metadata::Metadata(unsigned int Bloque_id):Block(0,0,0,"MD")
+{
+    
 }
 
 Metadata::Metadata(const char* nombreTabla, unsigned int cant_campos):Block(0, 0, 0, "MD") {
     strcpy(info.nombreTabla, nombreTabla);
     info.cant_campos = cant_campos;
-    info.cont_MD = 0;
+    info.inicio_MDCont = 0;
     info.inicio_BD = 0;
     info.ultimo_BD = 0;
      SystemBlock SB;
@@ -57,6 +57,11 @@ void Metadata::escribir() {
     disco.close();
 
 
+}
+
+unsigned int Metadata::getFinal_MDCont()
+{
+    
 }
 
 unsigned int Metadata::getEspacioDisponible()

@@ -62,7 +62,9 @@ void StorageManager::createTableSpace(const char* nombreBD, const char* version,
     }
 }
 
-void StorageManager::createTable(const char* nombreTabla, unsigned int cant_campos, InfoMDC* campos) {
+// ...Por Arreglar!!!
+
+/*void StorageManager::createTable(const char* nombreTabla, unsigned int cant_campos, InfoMDC* campos) {
     Metadata metadata(nombreTabla, cant_campos);
     metadata.escribir();
     fstream disco;
@@ -119,5 +121,5 @@ void StorageManager::createTable(const char* nombreTabla, unsigned int cant_camp
 
 
     
-}
+}*/
 

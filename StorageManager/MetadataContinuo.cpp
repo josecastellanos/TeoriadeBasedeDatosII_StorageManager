@@ -8,62 +8,130 @@
 #include "MetadataContinuo.h"
 #define path "tablespace.dat"
 
-MetadataContinuo::MetadataContinuo() :Block(0, 0, 0, "MDC"){
-    SystemBlock SB;
-    int libre_pos = SB.getFree();
-    header.blockID = libre_pos;
-    fstream disco;
-    disco.open(path, ios::binary | ios::in | ios::out);
-    if (!disco) {
-        return;
+MetadataContinuo::MetadataContinuo(unsigned int blockID, unsigned int blockIDMD):Block(0, 0, 0, "MDCB"){
+    Metadata MD(blockIDMD);    
+    this->header.blockID = blockID;
+    if (MD.getFinal_MDCont() != 0)
+    {
+        this->header.ant = MD.getFinal_MDCont();
     }
-    
-    unsigned int offset=4096*libre_pos;
-    disco.seekp(offset);
-    disco.write((const char*) &header, sizeof (Block));
-    disco.flush();
-    info.cant_campos=0;
-    disco.write((const char*) &info, sizeof (InfoCMD));
-    disco.flush();
-    SB.acomodarPrimerLibre();
-    disco.close();
+    else
+    {
+        this->header.ant = blockIDMD;
+    }
+    this->header.sig = 0;
+    this->info.blockIDMD = blockIDMD;
+    this->info.cant_campos = 0;
 }
 
-MetadataContinuo::MetadataContinuo(unsigned int pos):Block(0,0,0,"MDC"){
+MetadataContinuo::MetadataContinuo(unsigned int blockID):Block(0,0,0,"MDCB"){
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
         return;
     }
-    unsigned int offset=4096*pos;
+    unsigned int offset=4096*blockID;
     disco.seekg(offset);
-    disco.read((char*) &header, sizeof(Block));
-    disco.close();
-    
-    
+    disco.read((char*) &header, sizeof(Header));
+    disco.close();  
 }
 
-void MetadataContinuo::setcant_campos(unsigned int cantidad){
-    info.cant_campos=cantidad;
+void MetadataContinuo::setCant_campos(unsigned int cant_campos){
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
         return;
     }
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
+    disco.seekg(offset);    
+    disco.read((char*) &info, sizeof (InfoCMD));
+    info.cant_campos = cant_campos;
     disco.seekp(offset);
+    disco.write((const char*) &info, sizeof(InfoCMD));
+    disco.flush();
+    disco.close();
+}
+
+void MetadataContinuo::setBlockIDMD(unsigned int blockIDMD)
+{
+    fstream disco;
+    disco.open(path, ios::binary | ios::in | ios::out);
+    if (!disco) {
+        return;
+    }
+    unsigned int offset=(4096*header.blockID)+sizeof(Header);
+    disco.seekg(offset);    
+    disco.read((char*) &info, sizeof (InfoCMD));
+    info.blockIDMD = blockIDMD;
+    disco.seekp(offset);
+    disco.write((const char*) &info, sizeof(InfoCMD));
+    disco.flush();
+    disco.close();
+}
+
+unsigned int MetadataContinuo::getCant_campos()
+{
+    fstream disco;
+    disco.open(path, ios::binary | ios::in | ios::out);
+    if (!disco) {
+        return -1;
+    }
+    unsigned int offset=(4096*header.blockID)+sizeof(Header);
+    disco.seekg(offset);    
+    disco.read((char*) &info, sizeof (InfoCMD));
+    disco.close();
     
+    return info.cant_campos;
+}
+
+unsigned int MetadataContinuo::getBlockIDMD()
+{
+    fstream disco;
+    disco.open(path, ios::binary | ios::in | ios::out);
+    if (!disco) {
+        return -1;
+    }
+    unsigned int offset=(4096*header.blockID)+sizeof(Header);
+    disco.seekg(offset);    
+    disco.read((char*) &info, sizeof (InfoCMD));
+    disco.close();
+    
+    return info.blockIDMD;
+}
+
+void MetadataContinuo::escribir()
+{
+    fstream disco;
+    disco.open(path, ios::binary | ios::in | ios::out);
+    if (!disco) {
+        return;
+    }   
+    
+    unsigned int offset = this->header.blockID*4096;
+    disco.seekp(offset);
+    disco.write((const char*) &header, sizeof (Header));
+    disco.flush();
     disco.write((const char*) &info, sizeof (InfoCMD));
     disco.flush();
     disco.close();
 }
 
-void MetadataContinuo::escribir()
+unsigned int MetadataContinuo::getEspacioDisponible()
 {
+    fstream disco;
+    disco.open(path, ios::binary | ios::in | ios::out);
+    if (!disco) {
+        return -1;
+    }
+    unsigned int offset=(4096*header.blockID)+sizeof(Header);
+    disco.seekg(offset);    
+    disco.read((char*) &info, sizeof (InfoCMD));
+    disco.close();
     
+    return 4096-sizeof(Header)-sizeof(InfoCMD)-info.cant_campos*sizeof(InfoMDC);
 }
 
-unsigned int MetadataContinuo::getEspacioDisponible()
+InfoMDC MetadataContinuo::readCampo(unsigned int index)
 {
     
 }
