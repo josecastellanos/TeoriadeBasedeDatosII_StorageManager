@@ -58,4 +58,12 @@ void MetadataContinuo::setcant_campos(unsigned int cantidad){
     disco.close();
 }
 
+void MetadataContinuo::escribir()
+{
+    
+}
 
+unsigned int MetadataContinuo::getEspacioDisponible()
+{
+    
+}

@@ -34,6 +34,8 @@ public:
     unsigned int getPrimerMD();
     void setPrimerMD(unsigned int MD);
     void setUltimoMD(unsigned int MD);
+    virtual void escribir();
+    unsigned int getEspacioDisponible();
     
 private:
 

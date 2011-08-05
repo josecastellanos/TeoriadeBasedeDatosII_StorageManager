@@ -22,6 +22,8 @@
       <itemPath>StorageManager.h</itemPath>
       <itemPath>SystemBlock.cpp</itemPath>
       <itemPath>SystemBlock.h</itemPath>
+      <itemPath>Template.cpp</itemPath>
+      <itemPath>Template.h</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"

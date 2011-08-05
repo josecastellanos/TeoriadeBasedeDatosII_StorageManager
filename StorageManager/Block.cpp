@@ -8,7 +8,7 @@
 #include "Block.h"
 #define path "tablespace.dat"
 
-Block::Block(unsigned int blockID, unsigned int ant, unsigned int sig, const char* type) {
+Block::Block(unsigned int blockID, unsigned int ant, unsigned int sig, const char* type) : Template() {
     this->header.blockID = blockID;
     this->header.ant = ant;
     this->header.sig = sig;
@@ -42,4 +42,14 @@ void Block::setSig(unsigned int sig){
     disco.write((const char*) &header, sizeof (Block));
     disco.flush();
     disco.close();
+}
+
+void Block::escribir()
+{
+    
+}
+
+unsigned int Block::getEspacioDisponible()
+{
+    
 }

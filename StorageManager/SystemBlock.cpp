@@ -220,3 +220,13 @@ unsigned int SystemBlock::getPrimerMD()
          
         
 }
+
+void SystemBlock::escribir()
+{
+    
+}
+
+unsigned int SystemBlock::getEspacioDisponible()
+{
+
+}

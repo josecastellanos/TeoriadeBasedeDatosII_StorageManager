@@ -37,7 +37,8 @@ public:
     Metadata();
     Metadata(const char* nombreTabla, unsigned int cant_campos);
     Metadata(unsigned int Bloque_id);
-    void escribir();
+    virtual void escribir();
+    virtual unsigned int getEspacioDisponible();
    
     InfoMD info;
 private:

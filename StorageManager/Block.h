@@ -12,6 +12,7 @@
 #include <fstream>
 #include <iostream>
 #include <cstdlib>
+#include "Template.h"
 
 using namespace std;
 
@@ -24,14 +25,14 @@ public:
     char type[4];
 };
 
-class Block {
-public:
+class Block : Template {
+public:    
     Header header;
     Block(unsigned int blockID, unsigned int ant, unsigned int sig, const char* type);
     void setAnt(unsigned int ant);
     void setSig(unsigned int sig);
-    virtual void escribir() = 0;
-    virtual unsigned int getEspacioDisponible(); 
+    virtual void escribir();
+    virtual unsigned int getEspacioDisponible();
 private:
 
 };

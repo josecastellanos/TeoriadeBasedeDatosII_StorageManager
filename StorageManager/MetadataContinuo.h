@@ -23,7 +23,8 @@ public:
     InfoMDC retornar_Campo(unsigned int pos);
     InfoCMD info;
     void setcant_campos(unsigned int cantidad);
-    
+    virtual void escribir();
+    unsigned int getEspacioDisponible();
 
 private:
 

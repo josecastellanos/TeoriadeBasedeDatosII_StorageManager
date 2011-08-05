@@ -9,7 +9,7 @@
 #define path "tablespace.dat"
 
 Metadata::Metadata()
-:Block(0, 0, 0, "MD") {
+:Block(0, 0, 0, "MDB") {
 
 }
 
@@ -57,4 +57,9 @@ void Metadata::escribir() {
     disco.close();
 
 
+}
+
+unsigned int Metadata::getEspacioDisponible()
+{
+    
 }
