@@ -31,6 +31,12 @@ public:
     Block(unsigned int blockID, unsigned int ant, unsigned int sig, const char* type);
     void setAnt(unsigned int ant);
     void setSig(unsigned int sig);
+    void setBlockID(unsigned int blockID);
+    void setType(const char* type);
+    unsigned int getAnt();
+    unsigned int getSig();
+    unsigned int getBlockID();
+    char* getType();
     virtual void escribir();
     virtual unsigned int getEspacioDisponible();
 private:
