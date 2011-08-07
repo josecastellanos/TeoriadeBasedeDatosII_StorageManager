@@ -133,5 +133,33 @@ unsigned int MetadataContinuo::getEspacioDisponible()
 
 InfoMDC MetadataContinuo::readCampo(unsigned int index)
 {
+    InfoMDC temp;
+    fstream disco;
+    disco.open(path, ios::binary | ios::in | ios::out);
+    if (!disco) {
+        return temp;
+    }
     
+    unsigned int offset = 4096*header.blockID + sizeof(Header) + sizeof(InfoMDC);
+    unsigned int cant_campos = this->getCant_campos();
+    
+    if(index>=cant_campos)
+    {
+        //throw exception
+    }
+    else
+    {
+        for(int i=0; i<cant_campos; i++)
+        {
+            if (i==index)
+            {
+                disco.seekg(offset);
+                disco.read((char*) &temp, sizeof(InfoMDC));
+                disco.close();
+                
+                return temp;
+            }            
+            offset+=sizeof(InfoMDC);
+        }
+    }
 }
