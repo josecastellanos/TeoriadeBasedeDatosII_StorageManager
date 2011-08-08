@@ -17,8 +17,6 @@ Data::Data(unsigned int blockID, unsigned int blockIDMD):Block(0,0,0,"DATA")
     info.cantRegActivos = 0;
     info.cantRegFisicos = 0;
     
-    // Le Falta
-    Metadata mdb(blockIDMD);
 }
 
 Data::Data(unsigned int blockID):Block(0,0,0,"DATA")
