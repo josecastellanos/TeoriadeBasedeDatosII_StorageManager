@@ -38,4 +38,3 @@ private:
 };
 
 #endif	/* BLOCK_H */
-

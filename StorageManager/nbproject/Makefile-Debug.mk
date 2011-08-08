@@ -35,12 +35,14 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/Block.o \
-	${OBJECTDIR}/Template.o \
 	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/Template.o \
 	${OBJECTDIR}/SystemBlock.o \
 	${OBJECTDIR}/MetadataContinuo.o \
+	${OBJECTDIR}/InfoReg.o \
 	${OBJECTDIR}/StorageManager.o \
-	${OBJECTDIR}/Metadata.o
+	${OBJECTDIR}/Metadata.o \
+	${OBJECTDIR}/Data.o
 
 
 # C Compiler Flags
@@ -72,15 +74,15 @@ ${OBJECTDIR}/Block.o: Block.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Block.o Block.cpp
 
-${OBJECTDIR}/Template.o: Template.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Template.o Template.cpp
-
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
+
+${OBJECTDIR}/Template.o: Template.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Template.o Template.cpp
 
 ${OBJECTDIR}/SystemBlock.o: SystemBlock.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -92,6 +94,11 @@ ${OBJECTDIR}/MetadataContinuo.o: MetadataContinuo.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/MetadataContinuo.o MetadataContinuo.cpp
 
+${OBJECTDIR}/InfoReg.o: InfoReg.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/InfoReg.o InfoReg.cpp
+
 ${OBJECTDIR}/StorageManager.o: StorageManager.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
@@ -101,6 +108,11 @@ ${OBJECTDIR}/Metadata.o: Metadata.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Metadata.o Metadata.cpp
+
+${OBJECTDIR}/Data.o: Data.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Data.o Data.cpp
 
 # Subprojects
 .build-subprojects:
