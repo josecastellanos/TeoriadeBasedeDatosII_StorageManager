@@ -32,7 +32,7 @@ Data::Data(unsigned int blockID):Block(0,0,0,"DATA")
     disco.close();  
 }
 
-void MetadataContinuo::escribir()
+void Data::escribir()
 {
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
@@ -40,7 +40,7 @@ void MetadataContinuo::escribir()
         return;
     }   
     
-    unsigned int offset = header.blockID*4096;
+    unsigned int offset = this->header.blockID*4096;
     disco.seekp(offset);
     disco.write((const char*) &header, sizeof (Header));
     disco.flush();
@@ -65,7 +65,7 @@ unsigned int Data::getEspacioDisponible()
     return 4096-sizeof(Header)-sizeof(InfoD)-info.cantRegFisicos*sizeof(InfoD);
 }
 
-Data::setBlockIDMD(unsigned int blockIDMD)
+void Data::setBlockIDMD(unsigned int blockIDMD)
 {
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
@@ -85,7 +85,7 @@ Data::setBlockIDMD(unsigned int blockIDMD)
     disco.close();
 }
 
-Data::setCantRegActivos(unsigned int cantRegActivos)
+void Data::setCantRegActivos(unsigned int cantRegActivos)
 {
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
@@ -103,7 +103,7 @@ Data::setCantRegActivos(unsigned int cantRegActivos)
     disco.close();
 }
 
-Data::setCantRegFisicos(unsigned int cantRegFisicos)
+void Data::setCantRegFisicos(unsigned int cantRegFisicos)
 {
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
@@ -121,7 +121,7 @@ Data::setCantRegFisicos(unsigned int cantRegFisicos)
     disco.close();    
 }
 
-Data::getBlockIDMD()
+unsigned int Data::getBlockIDMD()
 {
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
@@ -136,7 +136,7 @@ Data::getBlockIDMD()
     return info.blockIDMD;
 }
 
-Data::getCantRegActivos()
+unsigned int Data::getCantRegActivos()
 {
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
@@ -151,7 +151,7 @@ Data::getCantRegActivos()
     return info.cantRegActivos;    
 }
 
-Data::getCantRegFisicos()
+unsigned int Data::getCantRegFisicos()
 {
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
@@ -167,23 +167,23 @@ Data::getCantRegFisicos()
 }
 
 // Asignado a Camilo
-Data::insertRecord(InfoReg reg)
+void Data::insertRecord(InfoReg reg)
 {
 }
 
 // Asignado a Dago
-Data::updateRecord(InfoReg reg, unsigned int index)
+void Data::updateRecord(InfoReg reg, unsigned int index)
 {
     
 }
 
 // Asignado a Jaime
-Data::deleteRecord(unsigned int index)
+void Data::deleteRecord(unsigned int index)
 {
 }
 
 // Asignado a Richard
-Data::selectRecord(unsigned int index)
+InfoReg Data::selectRecord(unsigned int index)
 {
 }
 
