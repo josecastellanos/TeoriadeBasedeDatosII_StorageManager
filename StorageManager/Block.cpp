@@ -19,7 +19,7 @@ void Block::setAnt(unsigned int ant){
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=4096*header.blockID;
     disco.seekg(offset);    
@@ -35,7 +35,7 @@ void Block::setSig(unsigned int sig){
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=4096*header.blockID;
     disco.seekg(offset);    
@@ -52,7 +52,7 @@ void Block::setBlockID(unsigned int blockID)
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=4096*header.blockID;
     disco.seekg(offset);    
@@ -69,7 +69,7 @@ void Block::setType(const char* type)
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=4096*header.blockID;
     disco.seekg(offset);    
@@ -86,7 +86,7 @@ unsigned int Block::getSig()
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return -1;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=4096*header.blockID;
     disco.seekg(offset);    
@@ -101,7 +101,7 @@ unsigned int Block::getAnt()
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return -1;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=4096*header.blockID;
     disco.seekg(offset);    
@@ -116,7 +116,7 @@ unsigned int Block::getBlockID()
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return -1;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=4096*header.blockID;
     disco.seekg(offset);    
@@ -131,7 +131,7 @@ char* Block::getType()
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return 0;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=4096*header.blockID;
     disco.seekg(offset);    
@@ -146,7 +146,7 @@ void Block::escribir()
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }   
     
     unsigned int offset = this->header.blockID*4096;

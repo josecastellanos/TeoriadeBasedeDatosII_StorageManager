@@ -13,6 +13,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "Template.h"
+#include "SMException.h"
 
 using namespace std;
 

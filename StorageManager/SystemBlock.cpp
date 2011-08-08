@@ -25,7 +25,7 @@ unsigned int SystemBlock::getFree()
     //disco.open("/home/mairen/jj.dat", ios::binary | ios::in | ios::out);
     
     if (!disco) {
-        return 0;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     //Avanzo hasta despues del Header
     unsigned int offset = sizeof(Header);
@@ -58,7 +58,7 @@ void SystemBlock::acomodarPrimerLibre()
     //disco.open("/home/mairen/jj.dat", ios::binary | ios::in | ios::out);
     
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     //Avanzo hasta despues del Header
     unsigned int offset = sizeof(Header);
@@ -113,7 +113,7 @@ unsigned int SystemBlock::getUltimoMD()
     //disco.open("/home/mairen/jj.dat", ios::binary | ios::in | ios::out);
     
     if (!disco) {
-        return 0;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     //Avanzo hasta despues del Header
     unsigned int offset = sizeof(Header);
@@ -138,7 +138,7 @@ void SystemBlock::setUltimoMD(unsigned int MD){
     //disco.open("/home/mairen/jj.dat", ios::binary | ios::in | ios::out);
     
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     //Avanzo hasta despues del Header
     unsigned int offset = sizeof(Header);
@@ -170,7 +170,7 @@ void SystemBlock::setPrimerMD(unsigned int MD){
     //disco.open("/home/mairen/jj.dat", ios::binary | ios::in | ios::out);
     
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     //Avanzo hasta despues del Header
     unsigned int offset = sizeof(Header);
@@ -203,7 +203,7 @@ unsigned int SystemBlock::getPrimerMD()
     //disco.open("/home/mairen/jj.dat", ios::binary | ios::in | ios::out);
     
     if (!disco) {
-        return 0;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     //Avanzo hasta despues del Header
     unsigned int offset = sizeof(Header);

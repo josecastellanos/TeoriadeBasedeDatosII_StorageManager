@@ -24,22 +24,12 @@ using namespace std;
 
 int main(int argc, char** argv) {
    
-    /*SystemBlock cp;
+    SystemBlock cp;
     StorageManager b;
     b.createTableSpace("jj","777","555",50);
     Metadata meta("camilo",4);
-    meta.escribir();*/
-    
-    try
-{
-throw SMException("YAYYY!!!");
-}
-catch(exception& e)
-{
-}
-
-return 0;
-    
+    meta.escribir();
+        
 //    InfoMDC array[4];
 //    
 //    InfoMDC x1;

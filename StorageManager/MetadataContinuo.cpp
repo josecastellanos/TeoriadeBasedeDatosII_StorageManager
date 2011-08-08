@@ -28,7 +28,7 @@ MetadataContinuo::MetadataContinuo(unsigned int blockID):Block(0,0,0,"MDCB"){
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=4096*blockID;
     disco.seekg(offset);
@@ -40,7 +40,7 @@ void MetadataContinuo::setCant_campos(unsigned int cant_campos){
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
     disco.seekg(offset);    
@@ -57,7 +57,7 @@ void MetadataContinuo::setBlockIDMD(unsigned int blockIDMD)
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
     disco.seekg(offset);    
@@ -74,7 +74,7 @@ unsigned int MetadataContinuo::getCant_campos()
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return -1;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
     disco.seekg(offset);    
@@ -89,7 +89,7 @@ unsigned int MetadataContinuo::getBlockIDMD()
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return -1;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
     disco.seekg(offset);    
@@ -104,7 +104,7 @@ void MetadataContinuo::escribir()
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }   
     
     unsigned int offset = this->header.blockID*4096;
@@ -121,7 +121,7 @@ unsigned int MetadataContinuo::getEspacioDisponible()
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return -1;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
     disco.seekg(offset);    
@@ -137,7 +137,7 @@ InfoMDC MetadataContinuo::readCampo(unsigned int index)
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return temp;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     
     unsigned int offset = 4096*header.blockID + sizeof(Header) + sizeof(InfoMDC);
@@ -145,7 +145,7 @@ InfoMDC MetadataContinuo::readCampo(unsigned int index)
     
     if(index>=cant_campos)
     {
-        //throw exception
+        throw SMException("Index invalido para el bloque de MetadataContinuo " + header.blockID);
     }
     else
     {

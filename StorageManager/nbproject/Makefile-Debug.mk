@@ -42,7 +42,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/MetadataContinuo.o \
 	${OBJECTDIR}/InfoReg.o \
 	${OBJECTDIR}/StorageManager.o \
-	${OBJECTDIR}/Metadata.o
+	${OBJECTDIR}/Metadata.o \
+	${OBJECTDIR}/Data.o
 
 
 # C Compiler Flags
@@ -113,6 +114,11 @@ ${OBJECTDIR}/Metadata.o: Metadata.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Metadata.o Metadata.cpp
+
+${OBJECTDIR}/Data.o: Data.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Data.o Data.cpp
 
 # Subprojects
 .build-subprojects:
