@@ -34,6 +34,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/SMException.o \
 	${OBJECTDIR}/Block.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/Template.o \
@@ -41,8 +42,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/MetadataContinuo.o \
 	${OBJECTDIR}/InfoReg.o \
 	${OBJECTDIR}/StorageManager.o \
-	${OBJECTDIR}/Metadata.o \
-	${OBJECTDIR}/Data.o
+	${OBJECTDIR}/Metadata.o
 
 
 # C Compiler Flags
@@ -68,6 +68,11 @@ LDLIBSOPTIONS=
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/storagemanager: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/storagemanager ${OBJECTFILES} ${LDLIBSOPTIONS} 
+
+${OBJECTDIR}/SMException.o: SMException.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/SMException.o SMException.cpp
 
 ${OBJECTDIR}/Block.o: Block.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -108,11 +113,6 @@ ${OBJECTDIR}/Metadata.o: Metadata.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Metadata.o Metadata.cpp
-
-${OBJECTDIR}/Data.o: Data.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Data.o Data.cpp
 
 # Subprojects
 .build-subprojects:
