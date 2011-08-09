@@ -18,7 +18,7 @@ public:
     unsigned int inicio_MDCont;
     unsigned int final_MDCont;
     unsigned int inicio_BD;
-    unsigned int ultimo_BD;
+    unsigned int final_BD;
 };
 
 class InfoMDC{
@@ -30,17 +30,32 @@ public:
     bool nulls;
     bool PK;
     char DEFAULT[30];
+    unsigned int inicio_varchar ;
+    unsigned int final_varchar ;
     
 };
 
 class Metadata : public Block {
 public:
-    Metadata(const char* nombreTabla, unsigned int cant_campos);
-    Metadata(unsigned int Bloque_id);
-    unsigned int getFinal_MDCont();
+    Metadata(unsigned int blockID, char* nombreTabla, unsigned int cant_campos);
+    Metadata(unsigned int blockID);
     virtual void escribir();
     virtual unsigned int getEspacioDisponible();
-   
+    unsigned int getFreeSpace(unsigned int espacio);
+    InfoMDC readCampo(unsigned int index);
+    
+    char* get_nombreTabla();
+    unsigned int getCant_campos();
+    unsigned int getInicio_MDCont();
+    unsigned int getFinal_MDCont();
+    unsigned int getInicio_BD();
+    unsigned int getFinalBD();
+    void setNombreTabla(char* nombreTabla);
+    void setCant_campos(unsigned int cant_campos);
+    void setInicio_MDCont(unsigned int inicio_MDCont);
+    void setFinal_MDCont(unsigned int final_MDCont);
+    void setInicio_BD(unsigned int inicio_BD);
+    void setFinalBD(unsigned int final_BD);
     InfoMD info;
 private:
 
