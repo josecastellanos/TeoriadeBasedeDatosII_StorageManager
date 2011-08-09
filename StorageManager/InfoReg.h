@@ -10,7 +10,7 @@
 
 class InfoReg {
 public:
-    InfoReg();
+    InfoReg(unsigned int blockIDMD);
     // Atributos
     unsigned short nulos;
     unsigned int tam;

@@ -11,6 +11,13 @@
 
 Data::Data(unsigned int blockID, unsigned int blockIDMD):Block(0,0,0,"DATA")
 {
+    Metadata MD(blockIDMD);    
+
+    if (MD.getFinal_MDCont() != 0)
+        header.ant = MD.getFinal_MDCont();
+    else
+        header.ant = blockIDMD;
+    
     header.blockID = blockID;
     
     info.blockIDMD = blockIDMD;

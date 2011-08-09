@@ -7,7 +7,7 @@
 
 #include "InfoReg.h"
 
-InfoReg::InfoReg() 
+InfoReg::InfoReg(unsigned int blockIDMD) 
 {
     
 }
