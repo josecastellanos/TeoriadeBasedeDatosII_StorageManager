@@ -6,30 +6,55 @@
  */
 
 #include "InfoReg.h"
+#include "Block.h"
+#include "MetadataContinuo.h"
 
-InfoReg::InfoReg(unsigned int blockIDMD) 
+InfoReg::InfoReg() 
 {
     
 }
 
-unsigned char* InfoReg::readCampo(unsigned int index)
+unsigned char* InfoReg::readCampo(unsigned int index,unsigned int blockIDMD)
 {
+    Block *bk = new Block(blockIDMD);
+    char* tipo = bk.getType();
     
+    if(strcmp(tipo,"MDB")==0)
+    {
+        Metadata *md;
+        md = (Metadata*)bk;
+        unsigned int cantidad = md->getCant_campos();
+    }
+    else if(strcmp(tipo,"MDCB")==0)
+    {
+        MetadataContinuo *md;
+        md = (MetadataContinuo*)bk;
+        unsigned int cantidad = md->getCant_campos();
+        
+        for(int i=0; i<cantidad; i++)
+        {
+            
+        }
+    }
+    else 
+    {
+        // Excepcion
+    }
 }
 
 void InfoReg::setContentReg(unsigned char* contentReg) {
-    this->contentReg = contentReg;
+    memcpy(this->contentReg,contentReg,strlen(contentReg));
 }
 
 unsigned char* InfoReg::getContentReg() {
     return contentReg;
 }
 
-void InfoReg::setTombstone(unsigned char tombstone) {
+void InfoReg::setTombstone(bool tombstone) {
     this->tombstone = tombstone;
 }
 
-unsigned char InfoReg::getTombstone() {
+bool InfoReg::getTombstone() {
     return tombstone;
 }
 

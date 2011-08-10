@@ -15,6 +15,19 @@ Block::Block(unsigned int blockID, unsigned int ant, unsigned int sig, const cha
     strcpy(this->header.type, type);
 }
 
+Block::Block(unsigned int blockID)
+{
+    fstream disco;
+    disco.open(path, ios::binary | ios::in | ios::out);
+    if (!disco) {
+        return; // AGregar excepciones
+    }
+    unsigned int offset=4096*blockID;
+    disco.seekg(offset);
+    disco.read((char*) &header, sizeof(Header));
+    disco.close();
+}
+
 void Block::setAnt(unsigned int ant){
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);

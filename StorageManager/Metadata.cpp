@@ -78,7 +78,6 @@ char* Metadata::get_nombreTabla(){
     disco.close();
     return info.nombreTabla;
     
-    
 }
 
 unsigned int Metadata::getCant_campos(){

@@ -9,12 +9,12 @@
 #include "SystemBlock.h"
 #define path "tablespace.dat"
 
-Data::Data(unsigned int blockID, unsigned int blockIDMD):Block(0,0,0,"DATA")
+Data::Data(unsigned int blockID, unsigned int blockIDMD):Block(0,0,0,"DB")
 {
-    Metadata MD(blockIDMD);    
-
-    if (MD.getFinal_MDCont() != 0)
-        header.ant = MD.getFinal_MDCont();
+    Metadata MD(blockIDMD);  
+    
+    if (MD.getFinalBD() != 0)
+        header.ant = MD.getFinalBD();
     else
         header.ant = blockIDMD;
     
@@ -26,12 +26,12 @@ Data::Data(unsigned int blockID, unsigned int blockIDMD):Block(0,0,0,"DATA")
     
 }
 
-Data::Data(unsigned int blockID):Block(0,0,0,"DATA")
+Data::Data(unsigned int blockID):Block(0,0,0,"DB")
 {
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return;
+        return; // AGregar excepciones
     }
     unsigned int offset=4096*blockID;
     disco.seekg(offset);
@@ -69,7 +69,7 @@ unsigned int Data::getEspacioDisponible()
     disco.read((char*) &info, sizeof (InfoD));
     disco.close();
     
-    return 4096-sizeof(Header)-sizeof(InfoD)-info.cantRegFisicos*sizeof(InfoD);
+    return 4096-sizeof(Header)-sizeof(InfoD)-info.cantRegFisicos*sizeof(InfoReg);
 }
 
 void Data::setBlockIDMD(unsigned int blockIDMD)
@@ -176,6 +176,7 @@ unsigned int Data::getCantRegFisicos()
 // Asignado a Camilo
 void Data::insertRecord(InfoReg reg)
 {
+    
 }
 
 // Asignado a Dago
@@ -187,10 +188,12 @@ void Data::updateRecord(InfoReg reg, unsigned int index)
 // Asignado a Jaime
 void Data::deleteRecord(unsigned int index)
 {
+    
 }
 
 // Asignado a Richard
 InfoReg Data::selectRecord(unsigned int index)
 {
+    
 }
 

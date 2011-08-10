@@ -10,22 +10,22 @@
 
 class InfoReg {
 public:
-    InfoReg(unsigned int blockIDMD);
+    InfoReg();
     // Atributos
     unsigned short nulos;
     unsigned int tam;
-    unsigned char tombstone;
+    bool tombstone;
     unsigned char* contentReg;
     
     // Funciones
-    unsigned char* readCampo(unsigned int index);
+    unsigned char* readCampo(unsigned int index,unsigned int blockIDMD);
 
     // Sets y Gets
     void setContentReg(unsigned char* contentReg);
     unsigned char* getContentReg();
     
-    void setTombstone(unsigned char tombstone);
-    unsigned char getTombstone();
+    void setTombstone(bool tombstone);
+    bool getTombstone();
     
     void setTam(unsigned int tam);
     unsigned int getTam();
