@@ -10,6 +10,7 @@
 
 class InfoReg {
 public:
+    InfoReg(unsigned short nulos,unsigned int tam,bool tombstone,unsigned char* contentReg);
     InfoReg();
     // Atributos
     unsigned short nulos;

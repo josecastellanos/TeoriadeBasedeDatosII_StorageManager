@@ -14,32 +14,54 @@ InfoReg::InfoReg()
     
 }
 
+InfoReg::InfoReg(unsigned short nulos, unsigned int tam, bool tombstone, unsigned char* contentReg)
+{
+    this->nulos = nulos;
+    this->tam = tam;
+    this->tombstone = tombstone;
+    this->contentReg = contentReg;
+}
+
 unsigned char* InfoReg::readCampo(unsigned int index,unsigned int blockIDMD)
 {
-    Block *bk = new Block(blockIDMD);
-    char* tipo = bk.getType();
+    // Terminado
+    Metadata md(blockIDMD);
+    unsigned int off=0;
+    unsigned char* resul;
     
-    if(strcmp(tipo,"MDB")==0)
+    for(int i=0; i<md.getCant_campos(); i++) 
     {
-        Metadata *md;
-        md = (Metadata*)bk;
-        unsigned int cantidad = md->getCant_campos();
-    }
-    else if(strcmp(tipo,"MDCB")==0)
-    {
-        MetadataContinuo *md;
-        md = (MetadataContinuo*)bk;
-        unsigned int cantidad = md->getCant_campos();
-        
-        for(int i=0; i<cantidad; i++)
+        InfoMDC info = md.readCampo(i);
+        if(i==index)
         {
+            // devolver reg
+            int val;
+            if(info.tipo_campo==1){val=4;}
+            else if(info.tipo_campo==2){val=8;}
+            else if(info.tipo_campo==3){val=info.escala;}
+            else if(info.tipo_campo==4){val=(4+4);}
+            else if(info.tipo_campo==5){val=1;}
+            else{//Throw Exception
+            }
             
+            int off2 = off+val;
+            for(int i=off;i<off2;i++ )
+            {
+                strcat(resul,contentReg[i]);
+            }
+            return resul;
+        }
+        else
+        {
+            if(info.tipo_campo==1){off+=4;}// es int
+            else if(info.tipo_campo==2){off+=8;} // es double
+            else if(info.tipo_campo==3){off+=info.escala;} // es char
+            else if(info.tipo_campo==4){off+=(4+4);} // es Varchar
+            else if(info.tipo_campo==5){off+=1;} // es bool
         }
     }
-    else 
-    {
-        // Excepcion
-    }
+    
+    return 0;
 }
 
 void InfoReg::setContentReg(unsigned char* contentReg) {
