@@ -18,6 +18,7 @@ public:
     //static string getPath();
     void createTableSpace(const char* nombreBD, const char* version, const char* clave, unsigned int cantBloques);
     //void createTable(const char* nombreTabla, unsigned int cant_campos, InfoMDC *campos);
+    void createTable(const char* nombreTabla, unsigned int cant_campos, InfoMDC *campos);
     
 private:
 
