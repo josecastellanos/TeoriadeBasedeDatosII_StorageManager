@@ -246,6 +246,28 @@ unsigned int Metadata::getEspacioDisponible() {
 }
 
 unsigned int Metadata::getFreeSpace(unsigned int espacio) {
+    int blockid = 0;
+   
+    Data dt = new Data(info.inicio_BD);
+    while(blockid==0){
+        if(dt->getBlockID()!= info.final_BD){
+            if(dt->getEspacioDisponible()>=espacio){
+                blockid = dt->getBlockID();
+            }else{
+                dt = new Data(dt->getSig());
+                
+            }
+        }else{
+           if(dt.getEspacioDisponible()>=espacio){
+                blockid = dt->getBlockID();
+            }else{
+               return 0;
+                
+            } 
+        }
+    }
+    
+    return blockid;
 
 }
 
@@ -257,7 +279,7 @@ InfoMDC Metadata::readCampo(unsigned int index) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
 
-    int max_campos_md = (4096 - sizeof (Header) - sizeof (InfoMD)) / sizeof (InfoMDC);
+    int max_campos_md = info.cant_campos;
     unsigned int offset = 0;
     InfoMDC imdc;
 
@@ -267,26 +289,31 @@ InfoMDC Metadata::readCampo(unsigned int index) {
         disco.seekg(offset);
         disco.read((char*) &imdc, sizeof (InfoMDC));
     }else{
+        if(info.inicio_MDCont!=0){
         MetadataContinuo *meta_cont = new MetadataContinuo(info.inicio_MDCont);
         int campos_por_contar = (index+1)-max_campos_md;
         unsigned int ind = index - max_campos_md;
-        bool find = false;
+        
         while (campos_por_contar>0){
                        
             if(ind<meta_cont->getCant_campos()){
                 imdc = meta_cont->readCampo(ind);
                 campos_por_contar=0;
-                find = true;
+               
             }else{
                 campos_por_contar = campos_por_contar-meta_cont->getCant_campos();
                 ind = ind -meta_cont->getCant_campos();
-                
+                if(meta_cont->getSig()!=0){
                 meta_cont = new MetadataContinuo(meta_cont->getSig());
+                }else{
+                  throw SMException("Indice invalido");  
+                }
             }
         }
-        if(find== false){
-          throw SMException("Indice invalido");  
-        }
+    }else{
+       throw SMException("Indice invalido");      
+    }
+
     }
     
     disco.close();
