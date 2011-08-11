@@ -193,7 +193,38 @@ void Data::deleteRecord(unsigned int index)
 
 // Asignado a Richard
 InfoReg Data::selectRecord(unsigned int index)
-{
+{       
+    InfoReg reg;
+    fstream disco;
+    disco.open(path, ios::binary | ios::in | ios::out);
+    if (!disco) {
+        return reg;
+    }
+    unsigned int offset = ( 4096 * header.blockID ) + sizeof(Header) + sizeof(InfoD);
+    disco.seekg(offset);
+    int x=0;
+    int cant = getCantRegFisicos();
+    
+    for(int i=0; i< cant; i++)
+    {
+        disco.read( (char*) &reg , sizeof(InfoReg));
+        
+        if(reg.tombstone) // == true
+        {
+            continue;
+        }
+        else if(!reg.tombstone)// == false
+        {
+            if(x==index)
+            {
+                return reg;
+            }
+            else
+            {
+                x++;
+            }
+        }
+    }
     
 }
 

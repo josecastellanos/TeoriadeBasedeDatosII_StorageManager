@@ -27,7 +27,7 @@ unsigned char* InfoReg::readCampo(unsigned int index,unsigned int blockIDMD)
     // Terminado
     Metadata md(blockIDMD);
     unsigned int off=0;
-    unsigned char* resul;
+    char* resul;
     
     for(int i=0; i<md.getCant_campos(); i++) 
     {
@@ -47,9 +47,9 @@ unsigned char* InfoReg::readCampo(unsigned int index,unsigned int blockIDMD)
             int off2 = off+val;
             for(int i=off;i<off2;i++ )
             {
-                strcat(resul,contentReg[i]);
+                strcat(resul,(char*)contentReg[i]);
             }
-            return resul;
+            return (unsigned char*)resul;
         }
         else
         {
@@ -65,7 +65,7 @@ unsigned char* InfoReg::readCampo(unsigned int index,unsigned int blockIDMD)
 }
 
 void InfoReg::setContentReg(unsigned char* contentReg) {
-    memcpy(this->contentReg,contentReg,strlen(contentReg));
+    //memcpy(this->contentReg,contentReg,strlen(contentReg));
 }
 
 unsigned char* InfoReg::getContentReg() {
