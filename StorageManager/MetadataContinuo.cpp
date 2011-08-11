@@ -8,25 +8,15 @@
 #include "MetadataContinuo.h"
 #define path "tablespace.dat"
 
-MetadataContinuo::MetadataContinuo(unsigned int blockID, unsigned int blockIDMD):Block(0, 0, 0, "MDCB"){
+MetadataContinuo::MetadataContinuo(unsigned int blockID, unsigned int blockIDMD):Block(blockID, 0, 0, "MDCB"){
     Metadata MD(blockIDMD);    
-    this->header.blockID = blockID;
-    if (MD.getFinal_MDCont() != 0)
-    {
-        this->header.ant = MD.getFinal_MDCont();
-    }
-    else
-    {
-        this->header.ant = blockIDMD;
-    }
-    this->header.sig = 0;
     this->info.blockIDMD = blockIDMD;
     this->info.cant_campos = 0;
 }
 
 MetadataContinuo::MetadataContinuo(unsigned int blockID):Block(0,0,0,"MDCB"){
     fstream disco;
-    disco.open(path, ios::binary | ios::in | ios::out);
+    disco.open(path, ios::binary | ios::in);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
@@ -72,7 +62,7 @@ void MetadataContinuo::setBlockIDMD(unsigned int blockIDMD)
 unsigned int MetadataContinuo::getCant_campos()
 {
     fstream disco;
-    disco.open(path, ios::binary | ios::in | ios::out);
+    disco.open(path, ios::binary | ios::in);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
@@ -87,7 +77,7 @@ unsigned int MetadataContinuo::getCant_campos()
 unsigned int MetadataContinuo::getBlockIDMD()
 {
     fstream disco;
-    disco.open(path, ios::binary | ios::in | ios::out);
+    disco.open(path, ios::binary | ios::in);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
@@ -102,7 +92,7 @@ unsigned int MetadataContinuo::getBlockIDMD()
 void MetadataContinuo::escribir()
 {
     fstream disco;
-    disco.open(path, ios::binary | ios::in | ios::out);
+    disco.open(path, ios::binary | ios::out);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }   
@@ -119,7 +109,7 @@ void MetadataContinuo::escribir()
 unsigned int MetadataContinuo::getEspacioDisponible()
 {
     fstream disco;
-    disco.open(path, ios::binary | ios::in | ios::out);
+    disco.open(path, ios::binary | ios::in);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
@@ -135,7 +125,7 @@ InfoMDC MetadataContinuo::readCampo(unsigned int index)
 {
     InfoMDC temp;
     fstream disco;
-    disco.open(path, ios::binary | ios::in | ios::out);
+    disco.open(path, ios::binary | ios::in);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
