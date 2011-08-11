@@ -27,8 +27,7 @@ int main(int argc, char** argv) {
     SystemBlock cp;
     StorageManager b;
     b.createTableSpace("jj","777","555",50);
-    Metadata meta("camilo",4);
-    meta.escribir();
+
         
 //    InfoMDC array[4];
 //    
