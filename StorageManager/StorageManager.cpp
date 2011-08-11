@@ -64,15 +64,24 @@ void StorageManager::createTableSpace(const char* nombreBD, const char* version,
 
 // ...Por Arreglar!!!
 
-/*void StorageManager::createTable(const char* nombreTabla, unsigned int cant_campos, InfoMDC* campos) {
-    Metadata metadata(nombreTabla, cant_campos);
+void StorageManager::createTable(const char* nombreTabla, unsigned int cant_campos, InfoMDC* campos) {
+    SystemBlock SB;
+    unsigned  int blockID  = SB.getFree();
+    
+    Metadata metadata(blockID, nombreTabla,cant_campos);
     metadata.escribir();
+    SB.acomodarPrimerLibre();
+    if(SB.getPrimerMD()==0){
+        SB.setPrimerMD(blockID);
+    }
+    SB.setUltimoMD(blockID);
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return;
+         return;
     }
-    unsigned int offset = (metadata.header.blockID * 4096) + sizeof (Header) + sizeof (InfoMD);
+    
+    unsigned int offset = (blockID* 4096) + sizeof (Header) + sizeof (InfoMD);
     int temp = (4096 - sizeof (Header) - sizeof (InfoMD)) / sizeof (InfoMDC);
 
     disco.seekp(offset);
@@ -90,13 +99,16 @@ void StorageManager::createTableSpace(const char* nombreBD, const char* version,
         
     }
 
-            unsigned int BlockID_Ant = metadata.header.blockID;
+            unsigned int BlockID_Ant = blockID;
             while (temp_cant_campos_restantes > 0) {
-
-                MetadataContinuo MDC;
-                if (BlockID_Ant != metadata.header.blockID) {
+                unsigned int free = SB.getFree();
+                MetadataContinuo MDC(free,blockID);
+                MDC.escribir();
+                SB.acomodarPrimerLibre();
+                
+                if (BlockID_Ant != blockID) {
                     MetadataContinuo MDC_ant(BlockID_Ant);
-                    MDC_ant.setSig(MDC.header.blockID);
+                    MDC_ant.setSig(MDC.getBlockID());
                 }
                 MDC.setAnt(BlockID_Ant);
                 offset = (MDC.header.blockID * 4096) + sizeof (Header) + sizeof (InfoCMD);
@@ -115,11 +127,11 @@ void StorageManager::createTableSpace(const char* nombreBD, const char* version,
 
                 }
 
-                BlockID_Ant = MDC.header.blockID;
+                BlockID_Ant = MDC.getBlockID();
 
             }
 
 
     
-}*/
+}
 

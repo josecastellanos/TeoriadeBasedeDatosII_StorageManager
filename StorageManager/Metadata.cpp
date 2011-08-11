@@ -24,27 +24,13 @@ Metadata::Metadata(unsigned int blockID):Block(0,0,0,"MD")
     
 }
 
-Metadata::Metadata(unsigned int blockID, char* nombreTabla, unsigned int cant_campos):Block(0, 0, 0, "MD") {
+Metadata::Metadata(unsigned int blockID, char* nombreTabla, unsigned int cant_campos):Block(blockID, 0, 0, "MDB") {
       strcpy(info.nombreTabla, nombreTabla);
       info.cant_campos = cant_campos;
       info.inicio_MDCont = 0;
       info.final_MDCont = 0;
       info.inicio_BD = 0;
       info.final_BD = 0;
-      SystemBlock SB;
-    if (blockID != 0) {
-        if (SB.getPrimerMD() == 0) {
-            SB.setPrimerMD(blockID);
-        }
-    
-    header.blockID=blockID;
-    header.ant = SB.getUltimoMD();
-    header.sig = 0;
-    strcpy(header.type,"MDB");     
-    SB.setUltimoMD(blockID);
-    }else{
-        return;
-    }
 
 }
 
