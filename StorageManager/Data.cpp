@@ -167,15 +167,108 @@ unsigned int Data::getCantRegFisicos()
 }
 
 // Asignado a Camilo
-void Data::insertRecord(InfoReg reg)
+void Data::insertRecord(Registro reg)
 {
     
 }
 
 // Asignado a Dago
-void Data::updateRecord(InfoReg reg, unsigned int index)
+void Data::updateRecord(Registro _new, unsigned int index)
 {
+    fstream disco;
+    disco.open(path, ios::binary | ios::in | ios::out);
+    if (!disco) {
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
+    }
     
+    if(index>=getCantRegActivos())
+    {
+        throw SMException("Index invalido para el bloque de Data " + header.blockID);
+    } 
+    
+    unsigned int offset = 4096*header.blockID + sizeof(Header);
+    disco.seekg(offset);
+    disco.read((char*) &info, sizeof(InfoD));
+    
+    unsigned int tamDisp = getEspacioDisponible();
+    unsigned int inicio_oldReg = offset + sizeof(InfoD);
+    unsigned int finalRegs_bloque = 4096*(header.blockID+1) - tamDisp;
+    
+    InfoReg tempInfo;
+    
+    int x=0;
+    
+    for(int i=0; i<info.cantRegFisicos; i++)
+    {
+        disco.seekg(inicio_oldReg);
+        disco.read((char*) &tempInfo, sizeof(InfoReg));
+        
+        if(!tempInfo.tombstone)
+        {
+            if(x==index)
+            {
+                break;
+            }
+            else
+            {
+                x++;
+            }
+        }      
+        
+        inicio_oldReg += sizeof(InfoReg) + tempInfo.tam;
+    }
+    
+    Registro _old = selectRecord(index);
+    mapabits nulos(_new.getNulos());
+    if(_old.getTam() == _new.getTam())
+    {
+        unsigned int offsetReg = 0;
+        unsigned char* buffer;
+        
+        Metadata md(info.blockIDMD);
+        for(int i=0; i<md.getCant_campos(); i++)
+        {
+            if(nulos.getAt(i))
+            {
+                continue;
+            }
+            
+            InfoMDC campo = md.readCampo(i);
+            switch(campo.tipo_campo)
+            {
+                case 1://Int
+                    for(int i=offsetReg; i<sizeof(int); i++)
+                    {
+                        strcat(buffer,_new.contentReg[i]);
+                    }
+                    offsetReg+=sizeof(int);
+                    break;
+                case 2://Double
+                    for(int i=offsetReg; i<sizeof(double); i++)
+                    {
+                        strcat(buffer,_new.contentReg[i]);
+                    }
+                    offsetReg+=sizeof(double);
+                    break;
+                case 3://Char
+                    for(int i=offsetReg; i<campo.escala; i++)
+                    {
+                        strcat(buffer,_new.contentReg[i]);
+                    }
+                    offsetReg+=campo.escala;
+                    break;
+                case 4://Varchar
+                    break;
+                case 5://Bool
+                    for(int i=offsetReg; i<sizeof(bool); i++)
+                    {
+                        strcat(buffer,_new.contentReg[i]);
+                    }
+                    offsetReg+=sizeof(bool);
+                    break;
+            }
+        }
+    }
 }
 
 // Asignado a Jaime
@@ -185,9 +278,9 @@ void Data::deleteRecord(unsigned int index)
 }
 
 // Asignado a Richard
-InfoReg Data::selectRecord(unsigned int index)
+Registro Data::selectRecord(unsigned int index)
 {       
-    InfoReg reg;
+    Registro reg;
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
@@ -202,11 +295,11 @@ InfoReg Data::selectRecord(unsigned int index)
     {
         disco.read( (char*) &reg , sizeof(InfoReg));
         
-        if(reg.tombstone) // == true
+        if(reg.info.tombstone) // == true
         {
             continue;
         }
-        else if(!reg.tombstone)// == false
+        else if(!reg.info.tombstone)// == false
         {
             if(x==index)
             {

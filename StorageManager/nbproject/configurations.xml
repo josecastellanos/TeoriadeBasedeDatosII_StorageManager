@@ -31,6 +31,8 @@
       <itemPath>Template.cpp</itemPath>
       <itemPath>Template.h</itemPath>
       <itemPath>main.cpp</itemPath>
+      <itemPath>mapabits.cpp</itemPath>
+      <itemPath>mapabits.h</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"

@@ -42,6 +42,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Registro.o \
 	${OBJECTDIR}/MetadataContinuo.o \
 	${OBJECTDIR}/StorageManager.o \
+	${OBJECTDIR}/mapabits.o \
 	${OBJECTDIR}/Metadata.o \
 	${OBJECTDIR}/Data.o
 
@@ -109,6 +110,11 @@ ${OBJECTDIR}/StorageManager.o: StorageManager.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/StorageManager.o StorageManager.cpp
+
+${OBJECTDIR}/mapabits.o: mapabits.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/mapabits.o mapabits.cpp
 
 ${OBJECTDIR}/Metadata.o: Metadata.cpp 
 	${MKDIR} -p ${OBJECTDIR}
