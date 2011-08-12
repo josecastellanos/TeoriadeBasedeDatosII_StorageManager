@@ -242,7 +242,7 @@ void Data::updateRecord(Registro _new, unsigned int index)
                     sizeMalloc+=sizeof(double);
                     break;
                 case 3://Char
-                    sizeMalloc+=campo.escala;
+                    sizeMalloc+=campo.size;
                     break;
                 case 4://Varchar
                     sizeMalloc+=sizeof(int)+sizeof(int);
@@ -282,10 +282,10 @@ void Data::updateRecord(Registro _new, unsigned int index)
                     _new.contentReg+=sizeof(double);
                     break;
                 case 3://Char
-                    memcpy(buffer,_new.contentReg,campo.escala);
-                    buffer+=campo.escala;
-                    _old.contentReg+=campo.escala;
-                    _new.contentReg+=campo.escala;
+                    memcpy(buffer,_new.contentReg,campo.size);
+                    buffer+=campo.size;
+                    _old.contentReg+=campo.size;
+                    _new.contentReg+=campo.size;
                     break;
                 case 4://Varchar
                     

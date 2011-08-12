@@ -16,8 +16,8 @@ Metadata::Metadata(unsigned int blockID) : Block(0, 0, 0, "MD") {
     }
     unsigned int offset = 4096 * blockID;
     disco.seekg(offset);
-    disco.read((const char*) &header, sizeof (Header));
-    disco.read((const char*) &info, sizeof (InfoMD));
+    disco.read((char*) &header, sizeof (Header));
+    disco.read((char*) &info, sizeof (InfoMD));
     disco.close();
 
 
