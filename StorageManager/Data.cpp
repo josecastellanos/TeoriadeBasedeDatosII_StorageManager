@@ -219,16 +219,15 @@ void Data::updateRecord(Registro _new, unsigned int index)
     }
     
     Registro _old = selectRecord(index);
-    mapabits nulos(_new.getNulos());
+    mapabits nulos_new(_new.getNulos());
+    mapabits nulos_old(_old.getNulos());
     if(_old.getTam() == _new.getTam())
     {
-        unsigned int offsetReg = 0;
-        unsigned char* buffer;
-        
         Metadata md(info.blockIDMD);
+        unsigned int sizeMalloc = 0;
         for(int i=0; i<md.getCant_campos(); i++)
         {
-            if(nulos.getAt(i))
+            if(nulos_new.getAt(i))
             {
                 continue;
             }
@@ -237,34 +236,65 @@ void Data::updateRecord(Registro _new, unsigned int index)
             switch(campo.tipo_campo)
             {
                 case 1://Int
-                    for(int i=offsetReg; i<sizeof(int); i++)
-                    {
-                        strcat(buffer,_new.contentReg[i]);
-                    }
-                    offsetReg+=sizeof(int);
+                    sizeMalloc+=sizeof(int);
                     break;
                 case 2://Double
-                    for(int i=offsetReg; i<sizeof(double); i++)
-                    {
-                        strcat(buffer,_new.contentReg[i]);
-                    }
-                    offsetReg+=sizeof(double);
+                    sizeMalloc+=sizeof(double);
                     break;
                 case 3://Char
-                    for(int i=offsetReg; i<campo.escala; i++)
-                    {
-                        strcat(buffer,_new.contentReg[i]);
-                    }
-                    offsetReg+=campo.escala;
+                    sizeMalloc+=campo.escala;
                     break;
                 case 4://Varchar
+                    sizeMalloc+=sizeof(int)+sizeof(int);
                     break;
                 case 5://Bool
-                    for(int i=offsetReg; i<sizeof(bool); i++)
-                    {
-                        strcat(buffer,_new.contentReg[i]);
-                    }
-                    offsetReg+=sizeof(bool);
+                    sizeMalloc+=sizeof(bool);
+                    break;
+            }
+        }
+        
+        unsigned char* buffer = (unsigned char*)malloc(sizeMalloc);
+        
+        for(int i=0; i<md.getCant_campos(); i++)
+        {            
+            if(nulos_old.getAt(i))
+            {
+                
+            }
+            if(nulos_new.getAt(i))
+            {
+                continue;
+            }
+            
+            InfoMDC campo = md.readCampo(i);
+            switch(campo.tipo_campo)
+            {
+                case 1://Int
+                    memcpy(buffer,_new.contentReg,sizeof(int));
+                    buffer+=sizeof(int);
+                    _old.contentReg+=sizeof(int);
+                    _new.contentReg+=sizeof(int);
+                    break;
+                case 2://Double
+                    memcpy(buffer,_new.contentReg,sizeof(double));
+                    buffer+=sizeof(double);
+                    _old.contentReg+=sizeof(double);
+                    _new.contentReg+=sizeof(double);
+                    break;
+                case 3://Char
+                    memcpy(buffer,_new.contentReg,campo.escala);
+                    buffer+=campo.escala;
+                    _old.contentReg+=campo.escala;
+                    _new.contentReg+=campo.escala;
+                    break;
+                case 4://Varchar
+                    
+                    break;
+                case 5://Bool
+                    memcpy(buffer,_new.contentReg,sizeof(bool));
+                    buffer+=sizeof(bool);
+                    _old.contentReg+=sizeof(bool);
+                    _new.contentReg+=sizeof(bool);
                     break;
             }
         }

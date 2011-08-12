@@ -7,6 +7,7 @@
 
 #ifndef DATA_H
 #define	DATA_H
+#include <cstdlib>
 #include "Registro.h"
 #include "Metadata.h"
 #include "mapabits.h"
