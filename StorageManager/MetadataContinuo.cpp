@@ -9,7 +9,6 @@
 #define path "tablespace.dat"
 
 MetadataContinuo::MetadataContinuo(unsigned int blockID, unsigned int blockIDMD):Block(blockID, 0, 0, "MDCB"){
-    Metadata MD(blockIDMD);    
     this->info.blockIDMD = blockIDMD;
     this->info.cant_campos = 0;
 }
@@ -137,19 +136,13 @@ InfoMDC MetadataContinuo::readCampo(unsigned int index)
     {
         throw SMException("Index invalido para el bloque de MetadataContinuo " + header.blockID);
     }
-    else
+    else 
     {
-        for(int i=0; i<cant_campos; i++)
-        {
-            if (i==index)
-            {
-                disco.seekg(offset);
-                disco.read((char*) &temp, sizeof(InfoMDC));
-                disco.close();
-                
-                return temp;
-            }            
-            offset+=sizeof(InfoMDC);
-        }
+        offset += sizeof (InfoMDC) * cant_campos;
+        disco.seekg(offset);
+        disco.read((char*) &temp, sizeof (InfoMDC));
+        disco.close();
+
+        return temp;
     }
 }

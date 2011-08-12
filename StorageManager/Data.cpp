@@ -9,27 +9,17 @@
 #include "SystemBlock.h"
 #define path "tablespace.dat"
 
-Data::Data(unsigned int blockID, unsigned int blockIDMD):Block(0,0,0,"DB")
-{
-    Metadata MD(blockIDMD);  
-    
-    if (MD.getFinalBD() != 0)
-        header.ant = MD.getFinalBD();
-    else
-        header.ant = blockIDMD;
-    
-    header.blockID = blockID;
-    
+Data::Data(unsigned int blockID, unsigned int blockIDMD):Block(blockID,0,0,"DB")
+{    
     info.blockIDMD = blockIDMD;
     info.cantRegActivos = 0;
-    info.cantRegFisicos = 0;
-    
+    info.cantRegFisicos = 0;    
 }
 
 Data::Data(unsigned int blockID):Block(0,0,0,"DB")
 {
     fstream disco;
-    disco.open(path, ios::binary | ios::in | ios::out);
+    disco.open(path, ios::binary | ios::in);
     if (!disco) {
         return; // AGregar excepciones
     }
@@ -42,7 +32,7 @@ Data::Data(unsigned int blockID):Block(0,0,0,"DB")
 void Data::escribir()
 {
     fstream disco;
-    disco.open(path, ios::binary | ios::in | ios::out);
+    disco.open(path, ios::binary | ios::out);
     if (!disco) {
         return;
     }   
@@ -60,7 +50,7 @@ void Data::escribir()
 unsigned int Data::getEspacioDisponible()
 {
     fstream disco;
-    disco.open(path, ios::binary | ios::in | ios::out);
+    disco.open(path, ios::binary | ios::in);
     if (!disco) {
         return -1;
     }
@@ -131,7 +121,7 @@ void Data::setCantRegFisicos(unsigned int cantRegFisicos)
 unsigned int Data::getBlockIDMD()
 {
     fstream disco;
-    disco.open(path, ios::binary | ios::in | ios::out);
+    disco.open(path, ios::binary | ios::in);
     if (!disco) {
         return -1;
     }
@@ -146,7 +136,7 @@ unsigned int Data::getBlockIDMD()
 unsigned int Data::getCantRegActivos()
 {
     fstream disco;
-    disco.open(path, ios::binary | ios::in | ios::out);
+    disco.open(path, ios::binary | ios::in);
     if (!disco) {
         return -1;
     }
@@ -161,7 +151,7 @@ unsigned int Data::getCantRegActivos()
 unsigned int Data::getCantRegFisicos()
 {
     fstream disco;
-    disco.open(path, ios::binary | ios::in | ios::out);
+    disco.open(path, ios::binary | ios::in);
     if (!disco) {
         return -1;
     }
