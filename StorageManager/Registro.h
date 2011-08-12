@@ -1,12 +1,16 @@
-/* 
+ /* 
  * File:   InfoReg.h
  * Author: rsiwady29
  *
  * Created on August 7, 2011, 11:29 AM
  */
 
-#ifndef INFOREG_H
-#define	INFOREG_H
+#ifndef REGISTRO_H
+#define	REGISTRO_H
+
+
+#include "Block.h"
+#include "Metadata.h"
 
 class InfoReg
 {
@@ -44,5 +48,5 @@ private:
 
 };
 
-#endif	/* INFOREG_H */
+#endif	/* REGISTRO_H */
 

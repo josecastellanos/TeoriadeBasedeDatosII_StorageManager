@@ -6,8 +6,6 @@
  */
 
 #include "Registro.h"
-#include "Block.h"
-#include "MetadataContinuo.h"
 
 Registro::Registro() 
 {

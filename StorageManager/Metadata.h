@@ -11,7 +11,6 @@
 #include "Block.h"
 #include "SystemBlock.h"
 #include "Registro.h"
-#include "MetadataContinuo.h"
 
 class InfoMD{
 public:
