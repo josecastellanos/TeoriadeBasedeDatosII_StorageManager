@@ -26,8 +26,7 @@ class InfoMDC{
 public:
     unsigned short tipo_campo;
     char nombre_campo[30];
-    unsigned int escala;
-    unsigned int precision;
+    unsigned int size;
     bool nulls;
     bool PK;
     char DEFAULT[30];
@@ -38,7 +37,11 @@ public:
 
 class Metadata : public Block {
 public:
+<<<<<<< HEAD
+    Metadata(unsigned int blockID, const char* nombreTabla, unsigned int cant_campos);
+=======
     Metadata(unsigned int blockID,const char* nombreTabla, unsigned int cant_campos);
+>>>>>>> d098a4e08cb8e8f8677b846dd9d6e7d0c3d49617
     Metadata(unsigned int blockID);
     virtual void escribir();
     virtual unsigned int getEspacioDisponible();
