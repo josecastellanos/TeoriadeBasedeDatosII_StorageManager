@@ -39,8 +39,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/Template.o \
 	${OBJECTDIR}/SystemBlock.o \
+	${OBJECTDIR}/Registro.o \
 	${OBJECTDIR}/MetadataContinuo.o \
-	${OBJECTDIR}/InfoReg.o \
 	${OBJECTDIR}/StorageManager.o \
 	${OBJECTDIR}/Metadata.o \
 	${OBJECTDIR}/Data.o
@@ -95,15 +95,15 @@ ${OBJECTDIR}/SystemBlock.o: SystemBlock.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/SystemBlock.o SystemBlock.cpp
 
+${OBJECTDIR}/Registro.o: Registro.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Registro.o Registro.cpp
+
 ${OBJECTDIR}/MetadataContinuo.o: MetadataContinuo.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/MetadataContinuo.o MetadataContinuo.cpp
-
-${OBJECTDIR}/InfoReg.o: InfoReg.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/InfoReg.o InfoReg.cpp
 
 ${OBJECTDIR}/StorageManager.o: StorageManager.cpp 
 	${MKDIR} -p ${OBJECTDIR}

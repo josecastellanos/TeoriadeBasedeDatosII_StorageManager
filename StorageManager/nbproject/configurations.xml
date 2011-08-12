@@ -16,12 +16,12 @@
       <itemPath>Block.h</itemPath>
       <itemPath>Data.cpp</itemPath>
       <itemPath>Data.h</itemPath>
-      <itemPath>InfoReg.cpp</itemPath>
-      <itemPath>InfoReg.h</itemPath>
       <itemPath>Metadata.cpp</itemPath>
       <itemPath>Metadata.h</itemPath>
       <itemPath>MetadataContinuo.cpp</itemPath>
       <itemPath>MetadataContinuo.h</itemPath>
+      <itemPath>Registro.cpp</itemPath>
+      <itemPath>Registro.h</itemPath>
       <itemPath>SMException.cpp</itemPath>
       <itemPath>SMException.h</itemPath>
       <itemPath>StorageManager.cpp</itemPath>

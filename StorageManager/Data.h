@@ -7,7 +7,7 @@
 
 #ifndef DATA_H
 #define	DATA_H
-#include "InfoReg.h"
+#include "Registro.h"
 #include "Metadata.h"
 
 class InfoD

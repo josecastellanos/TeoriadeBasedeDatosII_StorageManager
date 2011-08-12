@@ -59,6 +59,9 @@ unsigned int Data::getEspacioDisponible()
     disco.read((char*) &info, sizeof (InfoD));
     disco.close();
     
+    
+    
+    // Recorrer cada reg....
     return 4096-sizeof(Header)-sizeof(InfoD)-info.cantRegFisicos*sizeof(InfoReg);
 }
 

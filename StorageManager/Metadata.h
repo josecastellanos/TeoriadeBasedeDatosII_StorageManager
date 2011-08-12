@@ -10,6 +10,8 @@
 
 #include "Block.h"
 #include "SystemBlock.h"
+#include "Registro.h"
+#include "MetadataContinuo.h"
 
 class InfoMD{
 public:
@@ -37,7 +39,7 @@ public:
 
 class Metadata : public Block {
 public:
-    Metadata(unsigned int blockID, char* nombreTabla, unsigned int cant_campos);
+    Metadata(unsigned int blockID,const char* nombreTabla, unsigned int cant_campos);
     Metadata(unsigned int blockID);
     virtual void escribir();
     virtual unsigned int getEspacioDisponible();

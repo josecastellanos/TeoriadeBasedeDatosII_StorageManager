@@ -49,7 +49,6 @@ void Metadata::escribir() {
     disco.flush();
     disco.close();
 
-
 }
 
 char* Metadata::get_nombreTabla() {
