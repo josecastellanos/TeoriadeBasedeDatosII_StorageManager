@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
     memcpy(temp,&y,sizeof(unsigned char));
     temp+=sizeof(unsigned char);
     string z = "Maria";
+    char* cadena = (char*)z.c_str();
     memcpy(temp,z.c_str(),(int)y);
     temp+=y;
     temp-=(sizeof(unsigned int)+sizeof(unsigned int)+sizeof(unsigned char)+y);
@@ -39,15 +40,18 @@ int main(int argc, char *argv[])
     char *varchar = (char*)malloc(10+1);
     memcpy(varchar,&tam,sizeof(unsigned char));
     varchar+=sizeof(unsigned char);
-    for(int i=0; i<(int)tam; i++)
+    strcat((char*)varchar,(const char*)temp);
+    varchar+=(int)tam;
+    /*for(int i=0; i<(int)tam; i++)
     {
         memcpy(varchar,temp,sizeof(unsigned char));
         temp++;
         varchar++;
-    }
+    }*/
     varchar-=((int)tam+1);
 
-    for(int i=(int)tam+1; i<=10; i++)
+    int i;
+    for(i=(int)tam+1; i<=10; i++)
     {
         varchar[i]='#';
     }
