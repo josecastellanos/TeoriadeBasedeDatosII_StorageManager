@@ -6,7 +6,7 @@ class Registro;
 #include <cstdlib>
 #include "mapabits.h"
 #include "SystemBlock.h"
-#include "Block.h"
+#include "Varchar.h"
 #include "Metadata.h"
 #include "Registro.h"
 

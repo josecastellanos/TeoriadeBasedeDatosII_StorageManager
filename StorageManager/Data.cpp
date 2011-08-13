@@ -249,10 +249,6 @@ void Data::updateRecord(Registro _new, unsigned int index)
 
         for(int i=0; i<md.getCant_campos(); i++)
         {
-            if(nulos_old.getAt(i))
-            {
-
-            }
             if(nulos_new.getAt(i))
             {
                 continue;
@@ -264,28 +260,69 @@ void Data::updateRecord(Registro _new, unsigned int index)
                 case 1://Int
                     memcpy(buffer,_new.contentReg,sizeof(int));
                     buffer+=sizeof(int);
-                    _old.contentReg+=sizeof(int);
+                    if(!nulos_old.getAt(i))
+                    {
+                        _old.contentReg+=sizeof(int);
+                    }
                     _new.contentReg+=sizeof(int);
                     break;
                 case 2://Double
                     memcpy(buffer,_new.contentReg,sizeof(double));
                     buffer+=sizeof(double);
-                    _old.contentReg+=sizeof(double);
+                    if(!nulos_old.getAt(i))
+                    {
+                        _old.contentReg+=sizeof(double);
+                    }
                     _new.contentReg+=sizeof(double);
                     break;
                 case 3://Char
                     memcpy(buffer,_new.contentReg,campo.size);
                     buffer+=campo.size;
-                    _old.contentReg+=campo.size;
+                    if(!nulos_old.getAt(i))
+                    {
+                        _old.contentReg+=campo.size;
+                    }
                     _new.contentReg+=campo.size;
                     break;
                 case 4://Varchar
+                    if(!nulos_old.getAt(i))
+                    {
+                        unsigned int bIDV, pos;
+                        memcpy(&bIDV,_old.contentReg,sizeof(unsigned int));
+                        _old.contentReg+=sizeof(unsigned int);
+                        memcpy(&pos,_old.contentReg,sizeof(unsigned int));
+                        _old.contentReg+=sizeof(unsigned int);
 
+                        Varchar vb(bIDV);
+
+                        unsigned char tam;
+                        memcpy(&tam,_new.contentReg,1);
+                        _new.contentReg++;
+                        unsigned char *varchar = (unsigned char*)malloc(campo.size+1);
+                        memcpy(varchar,&tam,1);
+                        varchar++;
+                        memcpy(varchar,_new.contentReg,(int)tam);
+                        _new.contentReg+=(int)tam;
+
+                        for(int i=(int)tam; i<campo.size; i++)
+                        {
+                            varchar[i]='#';
+                        }
+
+                        vb.updateVarchar(varchar,pos);
+                    }
+                    else
+                    {
+
+                    }
                     break;
                 case 5://Bool
                     memcpy(buffer,_new.contentReg,sizeof(bool));
                     buffer+=sizeof(bool);
-                    _old.contentReg+=sizeof(bool);
+                    if(!nulos_old.getAt(i))
+                    {
+                        _old.contentReg+=sizeof(bool);
+                    }
                     _new.contentReg+=sizeof(bool);
                     break;
             }
