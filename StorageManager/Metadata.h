@@ -2,11 +2,10 @@
 #ifndef METADATA_H
 #define	METADATA_H
 
-#include "Registro.h"
-#include "Data.h"
+class Data;
 #include "MetadataContinuo.h"
 #include "InfoMD.h"
-#include "InfoMDC.h"
+#include "Data.h"
 
 class Metadata : public Block {
 public:

@@ -29,14 +29,14 @@ SOURCES += main.cpp \
     MetadataContinuo.cpp \
     InfoMD.cpp \
     InfoMDC.cpp \
-    InfoCMD.cpp
+    InfoCMD.cpp \
+    InfoReg.cpp
 
 HEADERS += \
     Block.h \
     Data.h \
     mapabits.h \
     Metadata.h \
-    Registro.h \
     SMException.h \
     StorageManager.h \
     SystemBlock.h \
@@ -45,4 +45,6 @@ HEADERS += \
     MetadataContinuo.h \
     InfoMD.h \
     InfoMDC.h \
-    InfoCMD.h
+    InfoCMD.h \
+    Registro.h \
+    InfoReg.h

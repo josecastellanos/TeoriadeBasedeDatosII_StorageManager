@@ -1,5 +1,4 @@
 #include "Data.h"
-#include "SystemBlock.h"
 #define path "tablespace.dat"
 
 Data::Data(unsigned int blockID, unsigned int blockIDMD):Block(blockID,0,0,"DB")
@@ -159,140 +158,140 @@ unsigned int Data::getCantRegFisicos()
     return info.cantRegFisicos;
 }
 
-// Asignado a Camilo
-//void Data::insertRecord(Registro reg)
-//{
+//Asignado a Camilo
+void Data::insertRecord(Registro reg)
+{
 
-//}
+}
 
-//// Asignado a Dago
-//void Data::updateRecord(Registro _new, unsigned int index)
-//{
-//    fstream disco;
-//    disco.open(path, ios::binary | ios::in | ios::out);
-//    if (!disco) {
-//        throw SMException("No se pudo abrir el archivo tablespace.dat");
-//    }
+// Asignado a Dago
+void Data::updateRecord(Registro _new, unsigned int index)
+{
+    fstream disco;
+    disco.open(path, ios::binary | ios::in | ios::out);
+    if (!disco) {
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
+    }
 
-//    if(index>=getCantRegActivos())
-//    {
-//        throw SMException("Index invalido para el bloque de Data " + header.blockID);
-//    }
+    if(index>=getCantRegActivos())
+    {
+        throw SMException("Index invalido para el bloque de Data " + header.blockID);
+    }
 
-//    unsigned int offset = 4096*header.blockID + sizeof(Header);
-//    disco.seekg(offset);
-//    disco.read((char*) &info, sizeof(InfoD));
+    unsigned int offset = 4096*header.blockID + sizeof(Header);
+    disco.seekg(offset);
+    disco.read((char*) &info, sizeof(InfoD));
 
-//    unsigned int tamDisp = getEspacioDisponible();
-//    unsigned int inicio_oldReg = offset + sizeof(InfoD);
-//    unsigned int finalRegs_bloque = 4096*(header.blockID+1) - tamDisp;
+    unsigned int tamDisp = getEspacioDisponible();
+    unsigned int inicio_oldReg = offset + sizeof(InfoD);
+    unsigned int finalRegs_bloque = 4096*(header.blockID+1) - tamDisp;
 
-//    InfoReg tempInfo;
+    InfoReg tempInfo;
 
-//    int x=0;
+    int x=0;
 
-//    for(int i=0; i<info.cantRegFisicos; i++)
-//    {
-//        disco.seekg(inicio_oldReg);
-//        disco.read((char*) &tempInfo, sizeof(InfoReg));
+    for(int i=0; i<info.cantRegFisicos; i++)
+    {
+        disco.seekg(inicio_oldReg);
+        disco.read((char*) &tempInfo, sizeof(InfoReg));
 
-//        if(!tempInfo.tombstone)
-//        {
-//            if(x==index)
-//            {
-//                break;
-//            }
-//            else
-//            {
-//                x++;
-//            }
-//        }
+        if(!tempInfo.tombstone)
+        {
+            if(x==index)
+            {
+                break;
+            }
+            else
+            {
+                x++;
+            }
+        }
 
-//        inicio_oldReg += sizeof(InfoReg) + tempInfo.tam;
-//    }
+        inicio_oldReg += sizeof(InfoReg) + tempInfo.tam;
+    }
 
-//    Registro _old = selectRecord(index);
-//    mapabits nulos_new(_new.getNulos());
-//    mapabits nulos_old(_old.getNulos());
-//    if(_old.getTam() == _new.getTam())
-//    {
-//        Metadata md(info.blockIDMD);
-//        unsigned int sizeMalloc = 0;
-//        for(int i=0; i<md.getCant_campos(); i++)
-//        {
-//            if(nulos_new.getAt(i))
-//            {
-//                continue;
-//            }
+    Registro _old = selectRecord(index);
+    mapabits nulos_new(_new.getNulos());
+    mapabits nulos_old(_old.getNulos());
+    if(_old.getTam() == _new.getTam())
+    {
+        Metadata md(info.blockIDMD);
+        unsigned int sizeMalloc = 0;
+        for(int i=0; i<md.getCant_campos(); i++)
+        {
+            if(nulos_new.getAt(i))
+            {
+                continue;
+            }
 
-//            InfoMDC campo = md.readCampo(i);
-//            switch(campo.tipo_campo)
-//            {
-//                case 1://Int
-//                    sizeMalloc+=sizeof(int);
-//                    break;
-//                case 2://Double
-//                    sizeMalloc+=sizeof(double);
-//                    break;
-//                case 3://Char
-//                    sizeMalloc+=campo.size;
-//                    break;
-//                case 4://Varchar
-//                    sizeMalloc+=sizeof(int)+sizeof(int);
-//                    break;
-//                case 5://Bool
-//                    sizeMalloc+=sizeof(bool);
-//                    break;
-//            }
-//        }
+            InfoMDC campo = md.readCampo(i);
+            switch(campo.tipo_campo)
+            {
+                case 1://Int
+                    sizeMalloc+=sizeof(int);
+                    break;
+                case 2://Double
+                    sizeMalloc+=sizeof(double);
+                    break;
+                case 3://Char
+                    sizeMalloc+=campo.size;
+                    break;
+                case 4://Varchar
+                    sizeMalloc+=sizeof(int)+sizeof(int);
+                    break;
+                case 5://Bool
+                    sizeMalloc+=sizeof(bool);
+                    break;
+            }
+        }
 
-//        unsigned char* buffer = (unsigned char*)malloc(sizeMalloc);
+        unsigned char* buffer = (unsigned char*)malloc(sizeMalloc);
 
-//        for(int i=0; i<md.getCant_campos(); i++)
-//        {
-//            if(nulos_old.getAt(i))
-//            {
+        for(int i=0; i<md.getCant_campos(); i++)
+        {
+            if(nulos_old.getAt(i))
+            {
 
-//            }
-//            if(nulos_new.getAt(i))
-//            {
-//                continue;
-//            }
+            }
+            if(nulos_new.getAt(i))
+            {
+                continue;
+            }
 
-//            InfoMDC campo = md.readCampo(i);
-//            switch(campo.tipo_campo)
-//            {
-//                case 1://Int
-//                    memcpy(buffer,_new.contentReg,sizeof(int));
-//                    buffer+=sizeof(int);
-//                    _old.contentReg+=sizeof(int);
-//                    _new.contentReg+=sizeof(int);
-//                    break;
-//                case 2://Double
-//                    memcpy(buffer,_new.contentReg,sizeof(double));
-//                    buffer+=sizeof(double);
-//                    _old.contentReg+=sizeof(double);
-//                    _new.contentReg+=sizeof(double);
-//                    break;
-//                case 3://Char
-//                    memcpy(buffer,_new.contentReg,campo.size);
-//                    buffer+=campo.size;
-//                    _old.contentReg+=campo.size;
-//                    _new.contentReg+=campo.size;
-//                    break;
-//                case 4://Varchar
+            InfoMDC campo = md.readCampo(i);
+            switch(campo.tipo_campo)
+            {
+                case 1://Int
+                    memcpy(buffer,_new.contentReg,sizeof(int));
+                    buffer+=sizeof(int);
+                    _old.contentReg+=sizeof(int);
+                    _new.contentReg+=sizeof(int);
+                    break;
+                case 2://Double
+                    memcpy(buffer,_new.contentReg,sizeof(double));
+                    buffer+=sizeof(double);
+                    _old.contentReg+=sizeof(double);
+                    _new.contentReg+=sizeof(double);
+                    break;
+                case 3://Char
+                    memcpy(buffer,_new.contentReg,campo.size);
+                    buffer+=campo.size;
+                    _old.contentReg+=campo.size;
+                    _new.contentReg+=campo.size;
+                    break;
+                case 4://Varchar
 
-//                    break;
-//                case 5://Bool
-//                    memcpy(buffer,_new.contentReg,sizeof(bool));
-//                    buffer+=sizeof(bool);
-//                    _old.contentReg+=sizeof(bool);
-//                    _new.contentReg+=sizeof(bool);
-//                    break;
-//            }
-//        }
-//    }
-//}
+                    break;
+                case 5://Bool
+                    memcpy(buffer,_new.contentReg,sizeof(bool));
+                    buffer+=sizeof(bool);
+                    _old.contentReg+=sizeof(bool);
+                    _new.contentReg+=sizeof(bool);
+                    break;
+            }
+        }
+    }
+}
 
 // Asignado a Jaime
 void Data::deleteRecord(unsigned int index)
@@ -300,39 +299,39 @@ void Data::deleteRecord(unsigned int index)
 
 }
 
-//// Asignado a Richard
-//Registro Data::selectRecord(unsigned int index)
-//{
-//    Registro reg;
-//    fstream disco;
-//    disco.open(path, ios::binary | ios::in | ios::out);
-//    if (!disco) {
-//        return reg;
-//    }
-//    unsigned int offset = ( 4096 * header.blockID ) + sizeof(Header) + sizeof(InfoD);
-//    disco.seekg(offset);
-//    int x=0;
-//    int cant = getCantRegFisicos();
+// Asignado a Richard
+Registro Data::selectRecord(unsigned int index)
+{
+    Registro reg;
+    fstream disco;
+    disco.open(path, ios::binary | ios::in | ios::out);
+    if (!disco) {
+        return reg;
+    }
+    unsigned int offset = ( 4096 * header.blockID ) + sizeof(Header) + sizeof(InfoD);
+    disco.seekg(offset);
+    int x=0;
+    int cant = getCantRegFisicos();
 
-//    for(int i=0; i< cant; i++)
-//    {
-//        disco.read( (char*) &reg , sizeof(InfoReg));
+    for(int i=0; i< cant; i++)
+    {
+        disco.read( (char*) &reg , sizeof(InfoReg));
 
-//        if(reg.info.tombstone) // == true
-//        {
-//            continue;
-//        }
-//        else if(!reg.info.tombstone)// == false
-//        {
-//            if(x==index)
-//            {
-//                return reg;
-//            }
-//            else
-//            {
-//                x++;
-//            }
-//        }
-//    }
+        if(reg.info.tombstone) // == true
+        {
+            continue;
+        }
+        else if(!reg.info.tombstone)// == false
+        {
+            if(x==index)
+            {
+                return reg;
+            }
+            else
+            {
+                x++;
+            }
+        }
+    }
 
-//}
+}

@@ -2,12 +2,9 @@
 #ifndef METADATACONTINUO_H
 #define	METADATACONTINUO_H
 
-#include "Block.h"
 #include "SystemBlock.h"
 #include "InfoMDC.h"
 #include "InfoCMD.h"
-
-
 
 class MetadataContinuo : public Block {
 public:

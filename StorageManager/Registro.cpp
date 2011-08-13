@@ -1,10 +1,3 @@
-/*
- * File:   InfoReg.cpp
- * Author: rsiwady29
- *
- * Created on August 7, 2011, 11:29 AM
- */
-
 #include "Registro.h"
 
 Registro::Registro()

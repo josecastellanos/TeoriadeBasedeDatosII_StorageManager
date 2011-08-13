@@ -1,24 +1,9 @@
-/*
-* File:   InfoReg.h
-* Author: rsiwady29
-*
-* Created on August 7, 2011, 11:29 AM
-*/
-
 #ifndef REGISTRO_H
-#define	REGISTRO_H
+#define REGISTRO_H
 
-
-#include "Block.h"
+class Metadata;
+#include "InfoReg.h"
 #include "Metadata.h"
-
-class InfoReg
-{
-public:
-   unsigned short nulos;
-   unsigned int tam;
-   bool tombstone;
-};
 
 class Registro {
 public:
@@ -48,4 +33,4 @@ private:
 
 };
 
-#endif	/* REGISTRO_H */
+#endif // REGISTRO_H

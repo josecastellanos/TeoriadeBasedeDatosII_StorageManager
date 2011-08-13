@@ -1,8 +1,14 @@
 #ifndef DATA_H
 #define	DATA_H
+
+class Metadata;
+class Registro;
 #include <cstdlib>
-#include "Metadata.h"
 #include "mapabits.h"
+#include "SystemBlock.h"
+#include "Block.h"
+#include "Metadata.h"
+#include "Registro.h"
 
 class InfoD
 {
@@ -17,9 +23,9 @@ public:
     Data(unsigned int blockID,unsigned int blockIDMD);
     Data(unsigned int blockID);
 
-//    void insertRecord(Registro reg);
-//    Registro selectRecord(unsigned int index);
-//    void updateRecord(Registro _new,unsigned int index);
+    void insertRecord(Registro reg);
+    Registro selectRecord(unsigned int index);
+    void updateRecord(Registro _new,unsigned int index);
     void deleteRecord(unsigned int index);
     virtual void escribir();
     unsigned int getEspacioDisponible();
