@@ -247,7 +247,39 @@ unsigned int Metadata::getEspacioDisponible() {
 
 }
 
-unsigned int Metadata::getFreeSpace(unsigned int espacio) {
+unsigned int Metadata::getFreeSpace(Registro Reg) {
+
+    mapabits nulos(Reg.getNulos());
+    unsigned int espacio= 0;
+    for(int i=0; i<getCant_campos(); i++)
+    {
+        if(nulos.getAt(i))
+        {
+            continue;
+        }
+
+        InfoMDC campo = readCampo(i);
+        switch(campo.tipo_campo)
+        {
+            case 1://Int
+                espacio+=sizeof(int);
+                break;
+            case 2://Double
+                espacio+=sizeof(double);
+                break;
+            case 3://Char
+                espacio+=campo.size;
+                break;
+            case 4://Varchar
+                espacio+=sizeof(int)+sizeof(int);
+                break;
+            case 5://Bool
+                espacio+=sizeof(bool);
+                break;
+        }
+    }
+
+
     int blockid = 0;
 
     Data *dt = new Data(info.inicio_BD);
