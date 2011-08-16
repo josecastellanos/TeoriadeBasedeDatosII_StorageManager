@@ -9,14 +9,8 @@ class Registro;
 #include "Varchar.h"
 #include "Metadata.h"
 #include "Registro.h"
+#include "InfoD.h"
 
-class InfoD
-{
-public:
-    unsigned int blockIDMD;
-    unsigned int cantRegFisicos;
-    unsigned int cantRegActivos;
-};
 
 class Data: public Block {
 public:

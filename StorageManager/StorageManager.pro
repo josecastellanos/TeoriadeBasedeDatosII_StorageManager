@@ -31,7 +31,8 @@ SOURCES += main.cpp \
     InfoMDC.cpp \
     InfoCMD.cpp \
     InfoReg.cpp \
-    InfoV.cpp
+    InfoV.cpp \
+    InfoD.cpp
 
 HEADERS += \
     Block.h \
@@ -49,4 +50,5 @@ HEADERS += \
     InfoCMD.h \
     Registro.h \
     InfoReg.h \
-    InfoV.h
+    InfoV.h \
+    InfoD.h

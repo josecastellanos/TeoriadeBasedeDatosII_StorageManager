@@ -13,7 +13,7 @@ Data::Data(unsigned int blockID):Block(0,0,0,"DB")
     fstream disco;
     disco.open(path, ios::binary | ios::in);
     if (!disco) {
-        return; // AGregar excepciones
+        //throw new SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=4096*blockID;
     disco.seekg(offset);
@@ -51,10 +51,21 @@ unsigned int Data::getEspacioDisponible()
     disco.read((char*) &info, sizeof (InfoD));
     disco.close();
 
+    InfoReg tempInfo;
+    offset += sizeof(InfoD);
 
+    unsigned int offset2 = sizeof(Header)+sizeof(InfoD);
 
-    // Recorrer cada reg....
-    return 4096-sizeof(Header)-sizeof(InfoD)-info.cantRegFisicos*sizeof(InfoReg);
+    for(int i=0; i<info.cantRegFisicos; i++)
+    {
+        disco.seekg(offset);
+        disco.read((char*) &tempInfo, sizeof(InfoReg));
+
+        offset += sizeof(InfoReg) + tempInfo.tam;
+        offset2 += sizeof(InfoReg) + tempInfo.tam;
+    }
+
+    return 4096 - offset2;
 }
 
 void Data::setBlockIDMD(unsigned int blockIDMD)
