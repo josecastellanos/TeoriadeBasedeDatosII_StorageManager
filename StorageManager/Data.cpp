@@ -13,7 +13,7 @@ Data::Data(unsigned int blockID):Block(0,0,0,"DB")
     fstream disco;
     disco.open(path, ios::binary | ios::in);
     if (!disco) {
-        //throw new SMException("No se pudo abrir el archivo tablespace.dat");
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=4096*blockID;
     disco.seekg(offset);
@@ -26,7 +26,7 @@ void Data::escribir()
     fstream disco;
     disco.open(path, ios::binary | ios::out);
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
 
     unsigned int offset = this->header.blockID*4096;
@@ -44,7 +44,7 @@ unsigned int Data::getEspacioDisponible()
     fstream disco;
     disco.open(path, ios::binary | ios::in);
     if (!disco) {
-        return -1;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
     disco.seekg(offset);
@@ -73,7 +73,7 @@ void Data::setBlockIDMD(unsigned int blockIDMD)
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
     disco.seekg(offset);
@@ -93,7 +93,7 @@ void Data::setCantRegActivos(unsigned int cantRegActivos)
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
     disco.seekg(offset);
@@ -111,7 +111,7 @@ void Data::setCantRegFisicos(unsigned int cantRegFisicos)
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
     disco.seekg(offset);
@@ -129,7 +129,7 @@ unsigned int Data::getBlockIDMD()
     fstream disco;
     disco.open(path, ios::binary | ios::in);
     if (!disco) {
-        return -1;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
     disco.seekg(offset);
@@ -144,7 +144,7 @@ unsigned int Data::getCantRegActivos()
     fstream disco;
     disco.open(path, ios::binary | ios::in);
     if (!disco) {
-        return -1;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
     disco.seekg(offset);
@@ -159,7 +159,7 @@ unsigned int Data::getCantRegFisicos()
     fstream disco;
     disco.open(path, ios::binary | ios::in);
     if (!disco) {
-        return -1;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset = ( 4096 * header.blockID ) + sizeof(Header);
     disco.seekg(offset);
@@ -357,7 +357,7 @@ Registro Data::selectRecord(unsigned int index)
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return reg;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset = ( 4096 * header.blockID ) + sizeof(Header) + sizeof(InfoD);
     disco.seekg(offset);
