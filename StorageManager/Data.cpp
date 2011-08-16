@@ -287,6 +287,7 @@ void Data::updateRecord(Registro _new, unsigned int index)
                 case 4://Varchar
                     if(!nulos_old.getAt(i))
                     {
+                        //Poner en el API que me manden con terminacion nula la cadena, y poner en varchar que recibe char* y cambiar el max_size sumarle 1
                         unsigned int bIDV, pos;
                         memcpy(&bIDV,_old.contentReg,sizeof(unsigned int));
                         _old.contentReg+=sizeof(unsigned int);
@@ -296,20 +297,22 @@ void Data::updateRecord(Registro _new, unsigned int index)
                         Varchar vb(bIDV);
 
                         unsigned char tam;
-                        memcpy(&tam,_new.contentReg,1);
-                        _new.contentReg++;
-                        unsigned char *varchar = (unsigned char*)malloc(campo.size+1);
-                        memcpy(varchar,&tam,1);
-                        varchar++;
-                        memcpy(varchar,_new.contentReg,(int)tam);
-                        _new.contentReg+=(int)tam;
+                        memcpy(&tam,_new.contentReg,sizeof(unsigned char));
+                        _new.contentReg+=sizeof(unsigned char);
+                        char *varchar = (char*)malloc(1+campo.size+1);
+                        memcpy(varchar,&tam,sizeof(unsigned char));
+                        varchar+=sizeof(unsigned char);
+                        memcpy(varchar,_new.contentReg,(int)tam+1);
+                        _new.contentReg+=(int)tam+1;
 
-                        for(int i=(int)tam; i<campo.size; i++)
+                        int i;
+                        for(i=(int)tam+1; i<=campo.size; i++)
                         {
                             varchar[i]='#';
                         }
+                        varchar[i+1]='\0';
 
-                        vb.updateVarchar(varchar,pos);
+                        //vb.updateVarchar(varchar,pos);
                     }
                     else
                     {

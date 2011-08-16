@@ -23,22 +23,20 @@ Varchar::Varchar(unsigned int blockID):Block(0,0,0,"VB") {
 
 
 }
-Varchar::Varchar(unsigned int blockID, unsigned int blockIDMD, unsigned int index, unsigned int max_size ):Block(0,0,0,"VB") {
+Varchar::Varchar(unsigned int blockID, unsigned int blockIDMD, unsigned int index, unsigned int max_size ):Block(blockID,0,0,"VB") {
 
     info.blockIDMD=blockIDMD;
     info.index=index;
-    info.max_size=max_size+1;
+    info.max_size=1+max_size+1;
     info.cant_varchars=0;
 
       //SystemBlock SB;
-
-    header.blockID=blockID;
     //strcpy(header.type,"VC");
     //SB.setUltimoMD(blockID);
 
 
 }
-unsigned int Varchar::insertVarchar(unsigned char* varchar){
+unsigned int Varchar::insertVarchar(char* varchar){
     fstream disco;
     disco.open(path, ios::binary | ios::out);
     if (!disco) {
@@ -74,14 +72,14 @@ void Varchar::escribir(){
     disco.flush();
     disco.close();
 }
-unsigned char* Varchar::selectVarchar(unsigned int index){
+char* Varchar::selectVarchar(unsigned int index){
     fstream disco;
     disco.open(path, ios::binary | ios::in);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     //if(index<info.cant_varchars){
-    unsigned char* varchar;
+    char* varchar;
     unsigned int offset = this->header.blockID*4096+sizeof(Header)+sizeof(InfoV);
 
     unsigned int max_size=this->getMax_size();
@@ -95,7 +93,7 @@ unsigned char* Varchar::selectVarchar(unsigned int index){
 
 
 }
-void Varchar::updateVarchar(unsigned char* varchar, unsigned int index){
+void Varchar::updateVarchar(char* varchar, unsigned int index){
 
     fstream disco;
     disco.open(path, ios::binary | ios::out);
