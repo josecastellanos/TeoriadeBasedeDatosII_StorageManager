@@ -305,6 +305,55 @@ unsigned int Metadata::getFreeSpace(Registro Reg) {
 
 }
 
+void Metadata::setCampo(unsigned int index,InfoMDC imdc){
+//    fstream disco;
+//    disco.open(path, ios::binary | ios::in | ios::out);
+//    if (!disco) {
+//        throw SMException("No se pudo abrir el archivo tablespace.dat");
+//    }
+
+//    unsigned int max_campos_md = info.cant_campos;
+//    unsigned int offset = 0;
+
+
+//    if (index < max_campos_md) {
+//        offset = (4096 * header.blockID) + sizeof (Header) + sizeof (InfoMD);
+//        offset += (index * sizeof (InfoMDC));
+//        disco.seekp(offset);
+//        disco.write((const char*) &imdc, sizeof (InfoMDC));
+//    } else {
+//        if (info.inicio_MDCont != 0) {
+//            MetadataContinuo *meta_cont = new MetadataContinuo(info.inicio_MDCont);
+//            int campos_por_contar = (index + 1) - max_campos_md;
+//            unsigned int ind = index - max_campos_md;
+
+//            while (campos_por_contar > 0) {
+
+//                if (ind < meta_cont->getCant_campos()) {
+//                    imdc = meta_cont->readCampo(ind);
+//                    campos_por_contar = 0;
+
+//                } else {
+//                    campos_por_contar = campos_por_contar - meta_cont->getCant_campos();
+//                    ind = ind - meta_cont->getCant_campos();
+//                    if (meta_cont->getSig() != 0) {
+//                        meta_cont = new MetadataContinuo(meta_cont->getSig());
+//                    } else {
+//                        throw SMException("Indice invalido");
+//                    }
+//                }
+//            }
+//        } else {
+//            throw SMException("Indice invalido");
+//        }
+
+//    }
+
+//    disco.close();
+
+}
+
+
 InfoMDC Metadata::readCampo(unsigned int index) {
 
     fstream disco;

@@ -18,6 +18,7 @@ public:
     virtual unsigned int getEspacioDisponible();
     unsigned int getFreeSpace(Registro Reg);
     InfoMDC readCampo(unsigned int index);
+    void setCampo(unsigned int index,InfoMDC imdc);
 
     char* get_nombreTabla();
     unsigned int getCant_campos();

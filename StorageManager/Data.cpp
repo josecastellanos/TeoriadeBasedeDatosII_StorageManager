@@ -238,7 +238,68 @@ void Data::insertRecord(Registro reg)
              reg.contentReg+=campo.size;
                  break;
              case 4://Varchar
-                // sizeMalloc+=sizeof(int)+sizeof(int);
+
+              int SIZE_V = (int)reg.contentReg[0];
+              unsigned char *varchar_u;
+              memcpy(varchar_u,reg.contentReg,SIZE_V+2);
+              reg.contentReg+=(SIZE_V+2);
+              char *varchar=(char*)malloc(campo.size+2);
+              memcpy(varchar,varchar_u,SIZE_V+2);
+              for(int a=SIZE_V+1;a<=campo.size;a++){
+                  varchar[a]='#';
+              }
+              varchar[campo.size+1]='\0';
+
+             unsigned int varcharID = campo.final_varchar;
+             if(varcharID==0){
+
+
+                 SystemBlock SB;
+                 unsigned int blockID = SB.getFree();
+                 Varchar vr(blockID,info.blockIDMD,i,campo.size);
+                 vr.escribir();
+
+                 unsigned int pos =vr.insertVarchar(varchar);
+                 campo.final_varchar=blockID;
+                 campo.inicio_varchar=blockID;
+                 md.setCampo(i,campo);
+                 memcpy(buffer,&blockID,sizeof(unsigned int));
+                 buffer+=sizeof(unsigned int);
+                 memcpy(buffer,&pos,sizeof(unsigned int));
+                 buffer+=sizeof(unsigned int);
+                 SB.acomodarPrimerLibre();
+
+
+             }else{
+                 Varchar vr(varcharID);
+                 unsigned int freespace = vr.getEspacioDisponible();
+                 if(freespace>=vr.getMax_size()){
+                    unsigned int pos=  vr.insertVarchar(varchar);
+                    memcpy(buffer,&varcharID,sizeof(unsigned int));
+                    buffer+=sizeof(unsigned int);
+                    memcpy(buffer,&pos,sizeof(unsigned int));
+                    buffer+=sizeof(unsigned int);
+
+                 }else{
+                     SystemBlock SB;
+                     unsigned int blockID = SB.getFree();
+                     Varchar vr_new(blockID,info.blockIDMD,i,campo.size);
+                     vr_new.escribir();
+
+                     unsigned int pos=vr_new.insertVarchar(varchar);
+                     vr_new.setAnt(varcharID);
+                     vr.setSig(blockID);
+                     campo.final_varchar=blockID;
+                     md.setCampo(i,campo);
+                     memcpy(buffer,&blockID,sizeof(unsigned int));
+                     buffer+=sizeof(unsigned int);
+                     memcpy(buffer,&pos,sizeof(unsigned int));
+                     buffer+=sizeof(unsigned int);
+                     SB.acomodarPrimerLibre();
+
+                 }
+             }
+
                  break;
              case 5://Bool
              memcpy(buffer,reg.contentReg,sizeof(bool));
