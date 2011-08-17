@@ -323,7 +323,7 @@ void Data::updateRecord(Registro _new, unsigned int index)
                         }
                         varchar[i+1]='\0';
 
-                        //vb.updateVarchar(varchar,pos);
+                        vb.updateVarchar(varchar,pos);
                     }
                     else
                     {
