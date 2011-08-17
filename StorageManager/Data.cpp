@@ -500,19 +500,21 @@ void Data::deleteRecord(unsigned int index)
 // Asignado a Richard
 Registro Data::selectRecord(unsigned int index)
 {
-    Registro reg;
+    InfoReg reg;
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
+
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
+
     unsigned int offset = ( 4096 * header.blockID ) + sizeof(Header) + sizeof(InfoD);
-    disco.seekg(offset);
     int x=0;
     int cant = getCantRegFisicos();
 
     for(int i=0; i< cant; i++)
     {
+        disco.seekg(offset);
         disco.read( (char*) &reg , sizeof(InfoReg));
 
         if(reg.info.tombstone) // == true
@@ -523,13 +525,17 @@ Registro Data::selectRecord(unsigned int index)
         {
             if(x==index)
             {
-                return reg;
+                Registro registro;
+                disco.seekg(offset);
+                disco.read((char*)&registro,sizeof(InfoReg)+reg.tam);
+                return registro;
             }
             else
             {
                 x++;
             }
         }
+        offset+=sizeof(InfoReg) + reg.tam;
     }
 
 }

@@ -37,8 +37,8 @@ unsigned char* Registro::readCampo(unsigned int index,unsigned int blockIDMD)
 
             resul = (unsigned char*)malloc(val);
             this->contentReg += off;
-
             memcpy(resul,this->contentReg,val);
+            this->contentReg -= off;
 
             return resul;
         }
