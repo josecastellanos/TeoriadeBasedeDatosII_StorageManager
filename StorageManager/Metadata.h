@@ -3,9 +3,11 @@
 #define	METADATA_H
 
 class Data;
+class Registro;
 #include "MetadataContinuo.h"
 #include "InfoMD.h"
 #include "Data.h"
+#include "Registro.h"
 
 class Metadata : public Block {
 public:
@@ -14,8 +16,9 @@ public:
     Metadata(unsigned int blockID);
     virtual void escribir();
     virtual unsigned int getEspacioDisponible();
-    unsigned int getFreeSpace(unsigned int espacio);
+    unsigned int getFreeSpace(Registro Reg);
     InfoMDC readCampo(unsigned int index);
+    void setCampo(unsigned int index,InfoMDC imdc);
 
     char* get_nombreTabla();
     unsigned int getCant_campos();

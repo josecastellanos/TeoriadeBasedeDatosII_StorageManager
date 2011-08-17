@@ -17,7 +17,7 @@ unsigned char* Registro::readCampo(unsigned int index,unsigned int blockIDMD)
     // Terminado
     Metadata md(blockIDMD);
     unsigned int off=0;
-    char* resul;
+    unsigned char* resul;
 
     for(int i=0; i<md.getCant_campos(); i++)
     {
@@ -26,28 +26,29 @@ unsigned char* Registro::readCampo(unsigned int index,unsigned int blockIDMD)
         {
             // devolver reg
             int val;
-            if(inf.tipo_campo==1){val=4;}
-            else if(inf.tipo_campo==2){val=8;}
+            if(inf.tipo_campo==1){val=sizeof(int);}
+            else if(inf.tipo_campo==2){val=sizeof(double);}
             else if(inf.tipo_campo==3){val=inf.size;}
-            else if(inf.tipo_campo==4){val=(4+4);}
-            else if(inf.tipo_campo==5){val=1;}
-            else{//Throw Exception
+            else if(inf.tipo_campo==4){val=(sizeof(int) + sizeof(int) );}
+            else if(inf.tipo_campo==5){val=sizeof(bool);}
+            else{
+                throw SMException("Ese tipo de campo no es Soportado");
             }
 
-            int off2 = off+val;
-            for(int i=off;i<off2;i++ )
-            {
-                //strcat(resul,(char*)contentReg[i]);
-            }
-            return (unsigned char*)resul;
+            resul = (unsigned char*)malloc(val);
+            this->contentReg += off;
+
+            memcpy(resul,this->contentReg,val);
+
+            return resul;
         }
         else
         {
-            if(inf.tipo_campo==1){off+=4;}// es int
-            else if(inf.tipo_campo==2){off+=8;} // es double
+            if(inf.tipo_campo==1){off+=sizeof(int);}// es int
+            else if(inf.tipo_campo==2){off+=sizeof(double);} // es double
             else if(inf.tipo_campo==3){off+=inf.size;} // es char
-            else if(inf.tipo_campo==4){off+=(4+4);} // es Varchar
-            else if(inf.tipo_campo==5){off+=1;} // es bool
+            else if(inf.tipo_campo==4){off+=(sizeof(int) + sizeof(int) );} // es Varchar
+            else if(inf.tipo_campo==5){off+=sizeof(bool);} // es bool
         }
     }
 
@@ -79,8 +80,7 @@ bool Registro::getTombstone(){
 }
 
 void Registro::setContentReg(unsigned char* contentReg){
-    //this->contentReg = contentReg;
-    // Cambiar por MemCpy
+    memcpy(this->contentReg,contentReg,sizeof(contentReg));
 }
 
 unsigned char* Registro::getContentReg(){

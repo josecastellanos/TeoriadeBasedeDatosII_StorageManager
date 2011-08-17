@@ -13,7 +13,7 @@ Data::Data(unsigned int blockID):Block(0,0,0,"DB")
     fstream disco;
     disco.open(path, ios::binary | ios::in);
     if (!disco) {
-        //throw new SMException("No se pudo abrir el archivo tablespace.dat");
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=4096*blockID;
     disco.seekg(offset);
@@ -26,7 +26,7 @@ void Data::escribir()
     fstream disco;
     disco.open(path, ios::binary | ios::out);
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
 
     unsigned int offset = this->header.blockID*4096;
@@ -44,7 +44,7 @@ unsigned int Data::getEspacioDisponible()
     fstream disco;
     disco.open(path, ios::binary | ios::in);
     if (!disco) {
-        return -1;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
     disco.seekg(offset);
@@ -73,7 +73,7 @@ void Data::setBlockIDMD(unsigned int blockIDMD)
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
     disco.seekg(offset);
@@ -93,7 +93,7 @@ void Data::setCantRegActivos(unsigned int cantRegActivos)
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
     disco.seekg(offset);
@@ -111,7 +111,7 @@ void Data::setCantRegFisicos(unsigned int cantRegFisicos)
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
     disco.seekg(offset);
@@ -129,7 +129,7 @@ unsigned int Data::getBlockIDMD()
     fstream disco;
     disco.open(path, ios::binary | ios::in);
     if (!disco) {
-        return -1;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
     disco.seekg(offset);
@@ -144,7 +144,7 @@ unsigned int Data::getCantRegActivos()
     fstream disco;
     disco.open(path, ios::binary | ios::in);
     if (!disco) {
-        return -1;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
     disco.seekg(offset);
@@ -159,7 +159,7 @@ unsigned int Data::getCantRegFisicos()
     fstream disco;
     disco.open(path, ios::binary | ios::in);
     if (!disco) {
-        return -1;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset = ( 4096 * header.blockID ) + sizeof(Header);
     disco.seekg(offset);
@@ -172,6 +172,153 @@ unsigned int Data::getCantRegFisicos()
 //Asignado a Camilo
 void Data::insertRecord(Registro reg)
 {
+    fstream disco;
+    disco.open(path, ios::binary | ios::in | ios::out);
+    if (!disco) {
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
+    }
+
+     mapabits nulos(reg.getNulos());
+     Metadata md(info.blockIDMD);
+
+     unsigned int sizeMalloc = 0;
+     for(int i=0; i<md.getCant_campos(); i++)
+     {
+         if(nulos.getAt(i))
+         {
+             continue;
+         }
+
+         InfoMDC campo = md.readCampo(i);
+         switch(campo.tipo_campo)
+         {
+             case 1://Int
+                 sizeMalloc+=sizeof(int);
+                 break;
+             case 2://Double
+                 sizeMalloc+=sizeof(double);
+                 break;
+             case 3://Char
+                 sizeMalloc+=campo.size;
+                 break;
+             case 4://Varchar
+                 sizeMalloc+=sizeof(int)+sizeof(int);
+                 break;
+             case 5://Bool
+                 sizeMalloc+=sizeof(bool);
+                 break;
+         }
+     }
+
+     unsigned char* buffer = (unsigned char*)malloc(sizeMalloc);
+
+     for(int i=0; i<md.getCant_campos(); i++)
+     {
+         if(nulos.getAt(i))
+         {
+             continue;
+         }
+
+         InfoMDC campo = md.readCampo(i);
+         switch(campo.tipo_campo)
+         {
+             case 1://Int
+             memcpy(buffer,reg.contentReg,sizeof(int));
+             buffer+=sizeof(int);
+             reg.contentReg+=sizeof(int);
+                 break;
+             case 2://Double
+             memcpy(buffer,reg.contentReg,sizeof(double));
+             buffer+=sizeof(double);
+             reg.contentReg+=sizeof(double);
+                 break;
+             case 3://Char
+             memcpy(buffer,reg.contentReg,campo.size);
+             buffer+=campo.size;
+             reg.contentReg+=campo.size;
+                 break;
+             case 4://Varchar
+
+              int SIZE_V = (int)reg.contentReg[0];
+              unsigned char *varchar_u;
+              memcpy(varchar_u,reg.contentReg,SIZE_V+2);
+              reg.contentReg+=(SIZE_V+2);
+              char *varchar=(char*)malloc(campo.size+2);
+              memcpy(varchar,varchar_u,SIZE_V+2);
+              for(int a=SIZE_V+1;a<=campo.size;a++){
+                  varchar[a]='#';
+              }
+              varchar[campo.size+1]='\0';
+
+             unsigned int varcharID = campo.final_varchar;
+             if(varcharID==0){
+
+
+                 SystemBlock SB;
+                 unsigned int blockID = SB.getFree();
+                 Varchar vr(blockID,info.blockIDMD,i,campo.size);
+                 vr.escribir();
+
+                 unsigned int pos =vr.insertVarchar(varchar);
+                 campo.final_varchar=blockID;
+                 campo.inicio_varchar=blockID;
+                 md.setCampo(i,campo);
+                 memcpy(buffer,&blockID,sizeof(unsigned int));
+                 buffer+=sizeof(unsigned int);
+                 memcpy(buffer,&pos,sizeof(unsigned int));
+                 buffer+=sizeof(unsigned int);
+                 SB.acomodarPrimerLibre();
+
+
+             }else{
+                 Varchar vr(varcharID);
+                 unsigned int freespace = vr.getEspacioDisponible();
+                 if(freespace>=vr.getMax_size()){
+                    unsigned int pos=  vr.insertVarchar(varchar);
+                    memcpy(buffer,&varcharID,sizeof(unsigned int));
+                    buffer+=sizeof(unsigned int);
+                    memcpy(buffer,&pos,sizeof(unsigned int));
+                    buffer+=sizeof(unsigned int);
+
+                 }else{
+                     SystemBlock SB;
+                     unsigned int blockID = SB.getFree();
+                     Varchar vr_new(blockID,info.blockIDMD,i,campo.size);
+                     vr_new.escribir();
+
+                     unsigned int pos=vr_new.insertVarchar(varchar);
+                     vr_new.setAnt(varcharID);
+                     vr.setSig(blockID);
+                     campo.final_varchar=blockID;
+                     md.setCampo(i,campo);
+                     memcpy(buffer,&blockID,sizeof(unsigned int));
+                     buffer+=sizeof(unsigned int);
+                     memcpy(buffer,&pos,sizeof(unsigned int));
+                     buffer+=sizeof(unsigned int);
+                     SB.acomodarPrimerLibre();
+
+                 }
+             }
+
+                 break;
+             case 5://Bool
+             memcpy(buffer,reg.contentReg,sizeof(bool));
+             buffer+=sizeof(bool);
+             reg.contentReg+=sizeof(bool);
+                 break;
+         }
+     }
+
+    reg.setContentReg(buffer);
+    reg.setTam(sizeMalloc);
+
+     unsigned int offset = 4096*header.blockID + (4096-getEspacioDisponible());
+     disco.seekp(offset);
+     disco.write((const char*) &reg, sizeof(reg));
+     disco.flush();
+     disco.close();
+
+
 
 }
 
@@ -357,7 +504,7 @@ Registro Data::selectRecord(unsigned int index)
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
-        return reg;
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset = ( 4096 * header.blockID ) + sizeof(Header) + sizeof(InfoD);
     disco.seekg(offset);
