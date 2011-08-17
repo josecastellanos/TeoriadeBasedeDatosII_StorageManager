@@ -172,6 +172,92 @@ unsigned int Data::getCantRegFisicos()
 //Asignado a Camilo
 void Data::insertRecord(Registro reg)
 {
+    fstream disco;
+    disco.open(path, ios::binary | ios::in | ios::out);
+    if (!disco) {
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
+    }
+
+     mapabits nulos(reg.getNulos());
+     Metadata md(info.blockIDMD);
+
+     unsigned int sizeMalloc = 0;
+     for(int i=0; i<md.getCant_campos(); i++)
+     {
+         if(nulos.getAt(i))
+         {
+             continue;
+         }
+
+         InfoMDC campo = md.readCampo(i);
+         switch(campo.tipo_campo)
+         {
+             case 1://Int
+                 sizeMalloc+=sizeof(int);
+                 break;
+             case 2://Double
+                 sizeMalloc+=sizeof(double);
+                 break;
+             case 3://Char
+                 sizeMalloc+=campo.size;
+                 break;
+             case 4://Varchar
+                 sizeMalloc+=sizeof(int)+sizeof(int);
+                 break;
+             case 5://Bool
+                 sizeMalloc+=sizeof(bool);
+                 break;
+         }
+     }
+
+     unsigned char* buffer = (unsigned char*)malloc(sizeMalloc);
+
+     for(int i=0; i<md.getCant_campos(); i++)
+     {
+         if(nulos.getAt(i))
+         {
+             continue;
+         }
+
+         InfoMDC campo = md.readCampo(i);
+         switch(campo.tipo_campo)
+         {
+             case 1://Int
+             memcpy(buffer,reg.contentReg,sizeof(int));
+             buffer+=sizeof(int);
+             reg.contentReg+=sizeof(int);
+                 break;
+             case 2://Double
+             memcpy(buffer,reg.contentReg,sizeof(double));
+             buffer+=sizeof(double);
+             reg.contentReg+=sizeof(double);
+                 break;
+             case 3://Char
+             memcpy(buffer,reg.contentReg,campo.size);
+             buffer+=campo.size;
+             reg.contentReg+=campo.size;
+                 break;
+             case 4://Varchar
+                // sizeMalloc+=sizeof(int)+sizeof(int);
+                 break;
+             case 5://Bool
+             memcpy(buffer,reg.contentReg,sizeof(bool));
+             buffer+=sizeof(bool);
+             reg.contentReg+=sizeof(bool);
+                 break;
+         }
+     }
+
+    reg.setContentReg(buffer);
+    reg.setTam(sizeMalloc);
+
+     unsigned int offset = 4096*header.blockID + (4096-getEspacioDisponible());
+     disco.seekp(offset);
+     disco.write((const char*) &reg, sizeof(reg));
+     disco.flush();
+     disco.close();
+
+
 
 }
 
