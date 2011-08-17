@@ -18,6 +18,7 @@ public:
     InfoMDC readCampo(unsigned int index);
     virtual void escribir();
     unsigned int getEspacioDisponible();
+    void setCampo(unsigned int index,InfoMDC imdc);
 
 private:
 };

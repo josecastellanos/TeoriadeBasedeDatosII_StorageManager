@@ -114,6 +114,30 @@ unsigned int MetadataContinuo::getEspacioDisponible()
     return 4096-sizeof(Header)-sizeof(InfoCMD)-info.cant_campos*sizeof(InfoMDC);
 }
 
+void MetadataContinuo::setCampo(unsigned int index, InfoMDC imdc)
+{
+    fstream disco;
+    disco.open(path, ios::binary | ios::out);
+    if (!disco) {
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
+    }
+
+    unsigned int offset = 4096*header.blockID + sizeof(Header) + sizeof(InfoCMD);
+    unsigned int cant_campos = this->getCant_campos();
+
+    if(index>=cant_campos)
+    {
+        throw SMException("Index invalido para el bloque de MetadataContinuo " + header.blockID);
+    }
+    else
+    {
+        offset += sizeof (InfoMDC) * index;
+        disco.seekp(offset);
+        disco.write((const char*) &imdc, sizeof (InfoMDC));
+        disco.close();
+    }
+}
+
 InfoMDC MetadataContinuo::readCampo(unsigned int index)
 {
     InfoMDC temp;
@@ -123,7 +147,7 @@ InfoMDC MetadataContinuo::readCampo(unsigned int index)
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
 
-    unsigned int offset = 4096*header.blockID + sizeof(Header) + sizeof(InfoMDC);
+    unsigned int offset = 4096*header.blockID + sizeof(Header) + sizeof(InfoCMD);
     unsigned int cant_campos = this->getCant_campos();
 
     if(index>=cant_campos)
@@ -132,7 +156,7 @@ InfoMDC MetadataContinuo::readCampo(unsigned int index)
     }
     else
     {
-        offset += sizeof (InfoMDC) * cant_campos;
+        offset += sizeof (InfoMDC) * index;
         disco.seekg(offset);
         disco.read((char*) &temp, sizeof (InfoMDC));
         disco.close();
