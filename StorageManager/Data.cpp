@@ -317,9 +317,6 @@ void Data::insertRecord(Registro reg)
      disco.write((const char*) &reg, sizeof(reg));
      disco.flush();
      disco.close();
-
-
-
 }
 
 // Asignado a Dago
@@ -494,7 +491,45 @@ void Data::updateRecord(Registro _new, unsigned int index)
 // Asignado a Jaime
 void Data::deleteRecord(unsigned int index)
 {
+    InfoReg reg;
+    fstream disco;
+    disco.open(path, ios::binary | ios::in | ios::out);
 
+    if (!disco) {
+        throw SMException("No se pudo abrir el archivo tablespace.dat");
+    }
+
+    unsigned int offset = ( 4096 * header.blockID ) + sizeof(Header) + sizeof(InfoD);
+    int x=0;
+    int cant = getCantRegFisicos();
+
+    for(int i=0; i< cant; i++)
+    {
+        disco.seekg(offset);
+        disco.read( (char*) &reg , sizeof(InfoReg));
+
+        if(reg.info.tombstone) // == true
+        {
+            continue;
+        }
+        else if(!reg.info.tombstone)// == false
+        {
+            if(x==index)
+            {
+                reg.info.tombstone=true;
+                disco.seekp(offset);
+                disco.write((const char*) &reg, sizeof(InfoReg));
+                disco.flush();
+                disco.close();
+                break;
+            }
+            else
+            {
+                x++;
+            }
+        }
+        offset+=sizeof(InfoReg) + reg.tam;
+    }
 }
 
 // Asignado a Richard
