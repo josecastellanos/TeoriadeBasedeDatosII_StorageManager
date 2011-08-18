@@ -181,45 +181,55 @@ void Data::insertRecord(Registro reg)
      mapabits nulos(reg.getNulos());
      Metadata md(info.blockIDMD);
 
-     unsigned int sizeMalloc = 0;
-     for(int i=0; i<md.getCant_campos(); i++)
-     {
-         if(nulos.getAt(i))
-         {
-             continue;
-         }
+     unsigned int sizeMalloc = md.getrecordsize();
 
-         InfoMDC campo = md.readCampo(i);
-         switch(campo.tipo_campo)
-         {
-             case 1://Int
-                 sizeMalloc+=sizeof(int);
-                 break;
-             case 2://Double
-                 sizeMalloc+=sizeof(double);
-                 break;
-             case 3://Char
-                 sizeMalloc+=campo.size;
-                 break;
-             case 4://Varchar
-                 sizeMalloc+=sizeof(int)+sizeof(int);
-                 break;
-             case 5://Bool
-                 sizeMalloc+=sizeof(bool);
-                 break;
-         }
-     }
 
      unsigned char* buffer = (unsigned char*)malloc(sizeMalloc);
 
      for(int i=0; i<md.getCant_campos(); i++)
      {
+         InfoMDC campo = md.readCampo(i);
+
          if(nulos.getAt(i))
          {
-             continue;
-         }
+             switch(campo.tipo_campo){
+                case 1:
+                 for(int s=0; s<sizeof(int);s++){
+                     buffer[s]='#';
+                 }
+                 buffer+=sizeof(int);
+                 break;
+                case 2:
+                 for(int s=0; s<sizeof(double);s++){
+                     buffer[s]='#';
+                 }
+                 buffer+=sizeof(double);
+                 break;
+                case 3:
+                 for(int s=0; s<campo.size;s++){
+                     buffer[s]='#';
+                 }
+                 buffer+=campo.size;
+                 break;
 
-         InfoMDC campo = md.readCampo(i);
+             case 4:
+                 for(int s=0; s<(sizeof(unsigned int)+sizeof(unsigned int));s++){
+                     buffer[s]='#';
+                 }
+                 buffer+=(sizeof(unsigned int)+sizeof(unsigned int));
+                 break;
+
+               case 5:
+                 for(int s=0; s<sizeof(bool);s++){
+                     buffer[s]='#';
+                 }
+                 buffer+=sizeof(bool);
+                 break;
+
+
+         }else{
+
+
          switch(campo.tipo_campo)
          {
              case 1://Int
@@ -307,6 +317,7 @@ void Data::insertRecord(Registro reg)
              reg.contentReg+=sizeof(bool);
                  break;
          }
+     }
      }
 
     reg.setContentReg(buffer);

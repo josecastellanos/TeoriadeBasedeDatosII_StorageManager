@@ -16,9 +16,10 @@ public:
     Metadata(unsigned int blockID);
     virtual void escribir();
     virtual unsigned int getEspacioDisponible();
-    unsigned int getFreeSpace(Registro Reg);
+    unsigned int getFreeSpace(int espacio);
     InfoMDC readCampo(unsigned int index);
     void setCampo(unsigned int index,InfoMDC imdc);
+    unsigned int getrecordsize();
 
     char* get_nombreTabla();
     unsigned int getCant_campos();
