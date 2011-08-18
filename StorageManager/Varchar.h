@@ -18,9 +18,9 @@ public:
     Varchar(unsigned int blockID, unsigned int blockIDMD, unsigned int index, unsigned int max_size);
     InfoV info;
 
-    unsigned int insertVarchar(char* varchar);
-    char* selectVarchar(unsigned int index);
-    void updateVarchar(char* varchar, unsigned int index);
+    unsigned int insertVarchar(unsigned char* varchar);
+    unsigned char* selectVarchar(unsigned int index);
+    void updateVarchar(unsigned char* varchar, unsigned int index);
 
     virtual void escribir();
     virtual unsigned int getEspacioDisponible();
