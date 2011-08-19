@@ -213,7 +213,7 @@ void Data::insertRecord(Registro reg)
                  break;
 
              case 4:
-
+            {
                 unsigned char *varchar=(unsigned char*)malloc(campo.size+2);
                 varchar[0]=(unsigned char)0 ;
                 for(int a=1;a<=(int)campo.size;a++){
@@ -235,7 +235,7 @@ void Data::insertRecord(Registro reg)
                  memcpy(buffer,&pos,sizeof(unsigned int));
                  buffer+=sizeof(unsigned int);
                  SB.acomodarPrimerLibre();
-
+}
 
                  break;
 
@@ -352,7 +352,7 @@ void Data::insertRecord(Registro reg)
 
      unsigned int offset = 4096*header.blockID + (4096-getEspacioDisponible());
      disco.seekp(offset);
-     disco.write((const char*) &reg, sizeof(reg));
+     disco.write((const char*) &reg, sizeof(InfoReg)+sizeMalloc);
      disco.flush();
      disco.close();
 }
@@ -375,39 +375,13 @@ void Data::updateRecord(Registro _new, unsigned int index)
     disco.seekg(offset);
     disco.read((char*) &info, sizeof(InfoD));
 
-    unsigned int tamDisp = getEspacioDisponible();
-    unsigned int inicio_oldReg = offset + sizeof(InfoD);
-    unsigned int finalRegs_bloque = 4096*(header.blockID+1) - tamDisp;
-
-    InfoReg tempInfo;
-
-    int x=0;
-
-    for(int i=0; i<(int)info.cantRegFisicos; i++)
-    {
-        disco.seekg(inicio_oldReg);
-        disco.read((char*) &tempInfo, sizeof(InfoReg));
-
-        if(!tempInfo.tombstone)
-        {
-            if(x==(int)index)
-            {
-                break;
-            }
-            else
-            {
-                x++;
-            }
-        }
-
-        inicio_oldReg += sizeof(InfoReg) + tempInfo.tam;
-    }
-
     Registro _old = selectRecord(index);
     mapabits nulos_new(_new.getNulos());
 
         Metadata md(info.blockIDMD);
-        unsigned int sizeMalloc = md.getrecordsize();
+        unsigned int sizeMalloc = md.getrecordsize();        
+
+        offset+=sizeof(InfoD) + index*(sizeof(InfoReg)+sizeMalloc);
 
         unsigned char* buffer = (unsigned char*)malloc(sizeMalloc);
 
@@ -482,14 +456,15 @@ void Data::updateRecord(Registro _new, unsigned int index)
                             memcpy(&pos,_old.contentReg,sizeof(unsigned int));
                             _old.contentReg+=sizeof(unsigned int);
 
-                            Varchar vb(bIDV);
+                            Varchar vb(bIDV);                            
+
+                            unsigned char *varchar = (unsigned char*)malloc(1+campo.size+1);
 
                             if(!nulos_new.getAt(i))
                             {
                                 unsigned char tam;
                                 memcpy(&tam,_new.contentReg,sizeof(unsigned char));
                                 _new.contentReg+=sizeof(unsigned char);
-                                unsigned char *varchar = (unsigned char*)malloc(1+campo.size+1);
                                 memcpy(varchar,&tam,sizeof(unsigned char));
                                 varchar+=sizeof(unsigned char);
                                 memcpy(varchar,_new.contentReg,(int)tam+1);
@@ -535,8 +510,8 @@ void Data::updateRecord(Registro _new, unsigned int index)
         _new.setContentReg(buffer);
         _new.setTam(sizeMalloc);
 
-        disco.seekp(inicio_oldReg);
-        disco.write((const char*) &_new, sizeof(InfoReg) + _new.getTam());
+        disco.seekp(offset);
+        disco.write((const char*) &_new, sizeof(InfoReg) + sizeMalloc);
         disco.flush();
         disco.close();
 }
