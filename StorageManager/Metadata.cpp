@@ -279,10 +279,10 @@ unsigned int Metadata::getrecordsize(){
 
 }
 
-unsigned int Metadata::getFreeSpace(Registro Reg) {
+unsigned int Metadata::getFreeSpace(int espacio) {
 
 
-    unsigned int espacio= getrecordsize();
+
 
     int blockid = 0;
 
