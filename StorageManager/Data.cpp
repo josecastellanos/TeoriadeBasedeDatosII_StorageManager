@@ -215,7 +215,7 @@ void Data::insertRecord(Registro reg)
              case 4:
 
                 unsigned char *varchar=(unsigned char*)malloc(campo.size+2);
-                varchar[0]='0';
+                varchar[0]=(unsigned char)0 ;
                 for(int a=1;a<=(int)campo.size;a++){
                      varchar[a]='#';
                    }
