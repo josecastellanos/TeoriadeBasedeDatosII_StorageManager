@@ -213,10 +213,30 @@ void Data::insertRecord(Registro reg)
                  break;
 
              case 4:
-                 for(int s=0; s<(int)(sizeof(unsigned int)+sizeof(unsigned int));s++){
-                     buffer[s]='#';
-                 }
-                 buffer+=(sizeof(unsigned int)+sizeof(unsigned int));
+
+                unsigned char *varchar=(unsigned char*)malloc(campo.size+2);
+                varchar[0]='0';
+                for(int a=1;a<=(int)campo.size;a++){
+                     varchar[a]='#';
+                   }
+                 varchar[campo.size+1]='\0';
+
+                 SystemBlock SB;
+                 unsigned int blockID = SB.getFree();
+                 Varchar vr(blockID,info.blockIDMD,i,campo.size);
+                 vr.escribir();
+
+                 unsigned int pos =vr.insertVarchar(varchar);
+                 campo.final_varchar=blockID;
+                 campo.inicio_varchar=blockID;
+                 md.setCampo(i,campo);
+                 memcpy(buffer,&blockID,sizeof(unsigned int));
+                 buffer+=sizeof(unsigned int);
+                 memcpy(buffer,&pos,sizeof(unsigned int));
+                 buffer+=sizeof(unsigned int);
+                 SB.acomodarPrimerLibre();
+
+
                  break;
 
                case 5:
