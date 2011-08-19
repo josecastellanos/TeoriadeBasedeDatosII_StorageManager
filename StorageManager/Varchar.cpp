@@ -36,7 +36,7 @@ Varchar::Varchar(unsigned int blockID, unsigned int blockIDMD, unsigned int inde
 
 
 }
-unsigned int Varchar::insertVarchar(char* varchar){
+unsigned int Varchar::insertVarchar(unsigned char* varchar){
     fstream disco;
     disco.open(path, ios::binary | ios::out);
     if (!disco) {
@@ -72,14 +72,14 @@ void Varchar::escribir(){
     disco.flush();
     disco.close();
 }
-char* Varchar::selectVarchar(unsigned int index){
+unsigned char* Varchar::selectVarchar(unsigned int index){
     fstream disco;
     disco.open(path, ios::binary | ios::in);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     //if(index<info.cant_varchars){
-    char* varchar;
+    unsigned char* varchar;
     unsigned int offset = this->header.blockID*4096+sizeof(Header)+sizeof(InfoV);
 
     unsigned int max_size=this->getMax_size();
@@ -89,11 +89,22 @@ char* Varchar::selectVarchar(unsigned int index){
     disco.seekg(offset);
     disco.read((char*) varchar, max_size);
     disco.close();
+
+    //Modificacion
+
+    unsigned char tam;
+    memcpy(&tam,varchar,sizeof(unsigned char));
+
+
+    varchar[(int)tam+1]='\0';
+    //*****
+
+
     return varchar;
 
 
 }
-void Varchar::updateVarchar(char* varchar, unsigned int index){
+void Varchar::updateVarchar(unsigned char* varchar, unsigned int index){
 
     fstream disco;
     disco.open(path, ios::binary | ios::out);
