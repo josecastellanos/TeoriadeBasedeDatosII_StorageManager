@@ -56,7 +56,7 @@ unsigned int Data::getEspacioDisponible()
 
     unsigned int offset2 = sizeof(Header)+sizeof(InfoD);
 
-    for(int i=0; i<info.cantRegFisicos; i++)
+    for(int i=0; i<(int)info.cantRegFisicos; i++)
     {
         disco.seekg(offset);
         disco.read((char*) &tempInfo, sizeof(InfoReg));
@@ -186,7 +186,7 @@ void Data::insertRecord(Registro reg)
 
      unsigned char* buffer = (unsigned char*)malloc(sizeMalloc);
 
-     for(int i=0; i<md.getCant_campos(); i++)
+     for(int i=0; i<(int)md.getCant_campos(); i++)
      {
          InfoMDC campo = md.readCampo(i);
 
@@ -194,39 +194,40 @@ void Data::insertRecord(Registro reg)
          {
              switch(campo.tipo_campo){
                 case 1:
-                 for(int s=0; s<sizeof(int);s++){
+                 for(int s=0; s<(int)sizeof(int);s++){
                      buffer[s]='#';
                  }
                  buffer+=sizeof(int);
                  break;
                 case 2:
-                 for(int s=0; s<sizeof(double);s++){
+                 for(int s=0; s<(int)sizeof(double);s++){
                      buffer[s]='#';
                  }
                  buffer+=sizeof(double);
                  break;
                 case 3:
-                 for(int s=0; s<campo.size;s++){
+                 for(int s=0; s<(int)campo.size;s++){
                      buffer[s]='#';
                  }
                  buffer+=campo.size;
                  break;
 
              case 4:
-                 for(int s=0; s<(sizeof(unsigned int)+sizeof(unsigned int));s++){
+                 for(int s=0; s<(int)(sizeof(unsigned int)+sizeof(unsigned int));s++){
                      buffer[s]='#';
                  }
                  buffer+=(sizeof(unsigned int)+sizeof(unsigned int));
                  break;
 
                case 5:
-                 for(int s=0; s<sizeof(bool);s++){
+                 for(int s=0; s<(int)sizeof(bool);s++){
                      buffer[s]='#';
                  }
                  buffer+=sizeof(bool);
                  break;
 
 
+         }
          }else{
 
 
@@ -246,16 +247,20 @@ void Data::insertRecord(Registro reg)
              memcpy(buffer,reg.contentReg,campo.size);
              buffer+=campo.size;
              reg.contentReg+=campo.size;
+
                  break;
              case 4://Varchar
 
-              int SIZE_V = (int)reg.contentReg[0];
+         {   unsigned char size;
+             memcpy(&size,reg.contentReg,sizeof(unsigned char));
+             int SIZE_V = (int)size;
+
               unsigned char *varchar_u;
               memcpy(varchar_u,reg.contentReg,SIZE_V+2);
               reg.contentReg+=(SIZE_V+2);
-              char *varchar=(char*)malloc(campo.size+2);
+              unsigned char *varchar=(unsigned char*)malloc(campo.size+2);
               memcpy(varchar,varchar_u,SIZE_V+2);
-              for(int a=SIZE_V+1;a<=campo.size;a++){
+              for(int a=SIZE_V+1;a<=(int)campo.size;a++){
                   varchar[a]='#';
               }
               varchar[campo.size+1]='\0';
@@ -310,6 +315,7 @@ void Data::insertRecord(Registro reg)
                  }
              }
 
+         }
                  break;
              case 5://Bool
              memcpy(buffer,reg.contentReg,sizeof(bool));
@@ -318,6 +324,7 @@ void Data::insertRecord(Registro reg)
                  break;
          }
      }
+
      }
 
     reg.setContentReg(buffer);
@@ -356,14 +363,14 @@ void Data::updateRecord(Registro _new, unsigned int index)
 
     int x=0;
 
-    for(int i=0; i<info.cantRegFisicos; i++)
+    for(int i=0; i<(int)info.cantRegFisicos; i++)
     {
         disco.seekg(inicio_oldReg);
         disco.read((char*) &tempInfo, sizeof(InfoReg));
 
         if(!tempInfo.tombstone)
         {
-            if(x==index)
+            if(x==(int)index)
             {
                 break;
             }
@@ -383,7 +390,7 @@ void Data::updateRecord(Registro _new, unsigned int index)
     {
         Metadata md(info.blockIDMD);
         unsigned int sizeMalloc = 0;
-        for(int i=0; i<md.getCant_campos(); i++)
+        for(int i=0; i<(int)md.getCant_campos(); i++)
         {
             if(nulos_new.getAt(i))
             {
@@ -413,7 +420,7 @@ void Data::updateRecord(Registro _new, unsigned int index)
 
         unsigned char* buffer = (unsigned char*)malloc(sizeMalloc);
 
-        for(int i=0; i<md.getCant_campos(); i++)
+        for(int i=0; i<(int)md.getCant_campos(); i++)
         {
             if(nulos_new.getAt(i))
             {
@@ -465,14 +472,14 @@ void Data::updateRecord(Registro _new, unsigned int index)
                         unsigned char tam;
                         memcpy(&tam,_new.contentReg,sizeof(unsigned char));
                         _new.contentReg+=sizeof(unsigned char);
-                        char *varchar = (char*)malloc(1+campo.size+1);
+                        unsigned char *varchar = (unsigned char*)malloc(1+campo.size+1);
                         memcpy(varchar,&tam,sizeof(unsigned char));
                         varchar+=sizeof(unsigned char);
                         memcpy(varchar,_new.contentReg,(int)tam+1);
                         _new.contentReg+=(int)tam+1;
 
                         int i;
-                        for(i=(int)tam+1; i<=campo.size; i++)
+                        for(i=(int)tam+1; i<=(int)campo.size; i++)
                         {
                             varchar[i]='#';
                         }
@@ -519,15 +526,15 @@ void Data::deleteRecord(unsigned int index)
         disco.seekg(offset);
         disco.read( (char*) &reg , sizeof(InfoReg));
 
-        if(reg.info.tombstone) // == true
+        if(reg.tombstone) // == true
         {
             continue;
         }
-        else if(!reg.info.tombstone)// == false
+        else if(!reg.tombstone)// == false
         {
-            if(x==index)
+            if(x==(int)index)
             {
-                reg.info.tombstone=true;
+                reg.tombstone=true;
                 disco.seekp(offset);
                 disco.write((const char*) &reg, sizeof(InfoReg));
                 disco.flush();
@@ -563,13 +570,13 @@ Registro Data::selectRecord(unsigned int index)
         disco.seekg(offset);
         disco.read( (char*) &reg , sizeof(InfoReg));
 
-        if(reg.info.tombstone) // == true
+        if(reg.tombstone) // == true
         {
             continue;
         }
-        else if(!reg.info.tombstone)// == false
+        else if(!reg.tombstone)// == false
         {
-            if(x==index)
+            if(x==(int)index)
             {
                 Registro registro;
                 disco.seekg(offset);
@@ -584,4 +591,5 @@ Registro Data::selectRecord(unsigned int index)
         offset+=sizeof(InfoReg) + reg.tam;
     }
 
+    exit(1);
 }

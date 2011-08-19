@@ -250,7 +250,7 @@ unsigned int Metadata::getEspacioDisponible() {
 unsigned int Metadata::getrecordsize(){
 
     unsigned int espacio= 0;
-    for(int i=0; i<getCant_campos(); i++)
+    for(int i=0; i<(int)getCant_campos(); i++)
     {
 
 
@@ -289,14 +289,14 @@ unsigned int Metadata::getFreeSpace(int espacio) {
     Data *dt = new Data(info.inicio_BD);
     while (blockid == 0) {
         if (dt->getBlockID() != info.final_BD) {
-            if (dt->getEspacioDisponible() >= espacio) {
+            if ((int)dt->getEspacioDisponible() >= espacio) {
                 blockid = dt->getBlockID();
             } else {
                 dt = new Data(dt->getSig());
 
             }
         } else {
-            if (dt->getEspacioDisponible() >= espacio) {
+            if ((int)dt->getEspacioDisponible() >= espacio) {
                 blockid = dt->getBlockID();
             } else {
                 return 0;
@@ -334,12 +334,12 @@ void Metadata::setCampo(unsigned int index,InfoMDC imdc){
             while (campos_por_contar > 0) {
 
                 if (ind < meta_cont->getCant_campos()) {
-                    imdc = meta_cont->setCampo(ind,imdc);
+                    meta_cont->setCampo(ind,imdc);
                     campos_por_contar = 0;
 
                 } else {
                     campos_por_contar = campos_por_contar - meta_cont->getCant_campos();
-                    ind = ind - meta_cont->setCampo(ind,imdc);
+                    ind = ind - meta_cont->getCant_campos();
                     if (meta_cont->getSig() != 0) {
                         meta_cont = new MetadataContinuo(meta_cont->getSig());
                     } else {
