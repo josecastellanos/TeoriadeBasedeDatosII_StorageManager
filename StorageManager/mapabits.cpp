@@ -15,6 +15,11 @@ void mapabits::mostrarmapa() {
 }
 
 bool mapabits::getAt(unsigned int index) {
+    if (index>16)
+    {
+        throw SMException("Index invalido para el mapa de bits");
+    }
+
     unsigned short m = mapa;
     unsigned short MASK = 1 << 15;
     for (int i = 0; i < 16; i++) {
