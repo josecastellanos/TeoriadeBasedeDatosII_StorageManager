@@ -78,12 +78,13 @@ unsigned char* Varchar::selectVarchar(unsigned int index){
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
-    //if(index<info.cant_varchars){
-    unsigned char* varchar;
+        
     unsigned int offset = this->header.blockID*4096+sizeof(Header)+sizeof(InfoV);
 
     unsigned int max_size=this->getMax_size();
-    //unsigned int cant_varchars=this->getCant_varchars();
+    //Agregue la siguiente Linea para asignar el espacio a varchar
+    unsigned char* varchar=(char*)malloc(max_size);
+    
 
     offset+=index*max_size;
     disco.seekg(offset);
