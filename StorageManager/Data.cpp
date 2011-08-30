@@ -275,7 +275,7 @@ void Data::insertRecord(Registro reg)
              memcpy(&size,reg.contentReg,sizeof(unsigned char));
              int SIZE_V = (int)size;
 
-              unsigned char *varchar_u;
+             unsigned char *varchar_u=(unsigned char*)malloc(SIZE_V+2);
               memcpy(varchar_u,reg.contentReg,SIZE_V+2);
               reg.contentReg+=(SIZE_V+2);
               unsigned char *varchar=(unsigned char*)malloc(campo.size+2);
