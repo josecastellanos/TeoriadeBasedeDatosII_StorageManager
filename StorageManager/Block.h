@@ -6,6 +6,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "SMException.h"
+#include <QString>
 
 using namespace std;
 

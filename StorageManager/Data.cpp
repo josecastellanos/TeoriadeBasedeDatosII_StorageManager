@@ -185,6 +185,7 @@ void Data::insertRecord(Registro reg)
 
 
      unsigned char* buffer = (unsigned char*)malloc(sizeMalloc);
+     printf("\nbuffer %p\n",buffer);
 
      for(int i=0; i<(int)md.getCant_campos(); i++)
      {
@@ -290,7 +291,6 @@ void Data::insertRecord(Registro reg)
              unsigned int varcharID = campo.final_varchar;
              if(varcharID==0){
 
-
                  SystemBlock SB;
                  unsigned int blockID = SB.getFree();
                  SB.acomodarPrimerLibre();
@@ -312,6 +312,7 @@ void Data::insertRecord(Registro reg)
                  Varchar vr(varcharID);
                  unsigned int freespace = vr.getEspacioDisponible();
                  if(freespace>=vr.getMax_size()){
+                     printf("\nesta aqui 2\n");
                     unsigned int pos=  vr.insertVarchar(varchar);
                     memcpy(buffer,&varcharID,sizeof(unsigned int));
                     buffer+=sizeof(unsigned int);
@@ -319,6 +320,7 @@ void Data::insertRecord(Registro reg)
                     buffer+=sizeof(unsigned int);
 
                  }else{
+                     printf("\nesta aqui 3\n");
                      SystemBlock SB;
                      unsigned int blockID = SB.getFree();
                      SB.acomodarPrimerLibre();
@@ -355,6 +357,7 @@ void Data::insertRecord(Registro reg)
      }
 //     reg.contentReg = (unsigned char*)malloc(sizeMalloc);
      buffer-=md.getrecordsize();
+     printf("\nbuffer %p\n",buffer);
     reg.setContentReg(buffer);
     reg.setTam(sizeMalloc);
 
@@ -525,16 +528,18 @@ void Data::updateRecord(Registro _new, unsigned int index)
             }
         }
 
-        _new.contentReg = (unsigned char*)malloc(sizeMalloc);
+        buffer-=md.getrecordsize();
         _new.setContentReg(buffer);
         _new.setTam(sizeMalloc);
 
         disco.seekp(offset);
-        disco.write((const char*) &_new, sizeof(InfoReg) + sizeMalloc);
+
+        disco.write((const char*) &_new.info, sizeof(InfoReg));
+        disco.write((const char*) _new.contentReg,sizeMalloc);
         disco.flush();
-        free(buffer);
-        free(_new.contentReg);
         disco.close();
+
+        free(buffer);
 }
 
 // Asignado a Jaime
@@ -553,7 +558,7 @@ void Data::deleteRecord(unsigned int index)
     int cant = getCantRegFisicos();
 
 
-    if(index>=cant)
+    if(index>=getCantRegActivos())
     {
         throw SMException("Index invalido para el bloque de Data " + header.blockID);
     }
@@ -587,6 +592,8 @@ void Data::deleteRecord(unsigned int index)
         }
         offset+=sizeof(InfoReg) + reg.tam;
     }
+
+        this->setCantRegActivos(this->getCantRegActivos()-1);
     }
 }
 
@@ -606,7 +613,7 @@ Registro Data::selectRecord(unsigned int index)
     int cant = getCantRegFisicos();
 
 
-    if(index>=cant)
+    if(index>=getCantRegActivos())
     {
         throw SMException("Index invalido para el bloque de Data " + header.blockID);
     }

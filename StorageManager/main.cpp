@@ -20,7 +20,11 @@ int main(int argc, char *argv[])
     campo1.tipo_campo=1;
     InfoMDC campo2;
     strcpy(campo2.nombre_campo,"campo2");
-    campo2.tipo_campo=1;
+    campo2.tipo_campo=4;
+    campo2.size=10;
+    campo2.inicio_varchar=0;
+    campo2.final_varchar=0;
+
     InfoMDC campos[] = {campo1,campo2};
      SM->createTable("tabla1",2,campos);
 
@@ -36,32 +40,68 @@ int main(int argc, char *argv[])
      md.setInicio_BD(bid);
      md.setFinalBD(bid);
 
-     unsigned char *contenido = (unsigned char *)malloc(sizeof(unsigned char)*8);
-     int x = 5;
-     int y = 6;
+     unsigned char *contenido = (unsigned char *)malloc(sizeof(unsigned char)*11);
+    printf("\ncontenido p: %p\n",contenido);
+     unsigned char *temp = (unsigned char*)malloc(7);
+     printf("\ntemp: %p\n",temp);
+     unsigned char y = 5;
+         memcpy(temp,&y,sizeof(unsigned char));
+         temp+=sizeof(unsigned char);
+         string z = "Maria";
+         //char* cadena = (char*)z.c_str();
+         memcpy(temp,z.c_str(),(int)y+1);
+         //temp+=y+1;
+         temp-=sizeof(unsigned char);
+         temp[6]='\0';
+        printf("\ntemp: %p\n",temp);
+         int x = 5;
      memcpy(contenido,&x,sizeof(int));
      contenido+=sizeof(int);
-     memcpy(contenido,&y,sizeof(int));
-     contenido-=sizeof(int);
+     memcpy(contenido,temp,7);
+     contenido-=(sizeof(int));
+
+     printf("\ncontenido p: %p\n",contenido);
      printf("\not_insert:%p\n",contenido);
      printf("\ncontenido:%s\n",contenido);
      Registro reg(0,8,false,contenido);
      reg.setContentReg(contenido);
      db.insertRecord(reg);
      free(contenido);
-     reg = db.selectRecord(0);
 
-     unsigned char *temp = reg.getContentReg();
-     //printf("\ncontenido reg:%s\n",reg.getContentReg());
-     x = 0;
-     y = 0;
+     /*contenido = (unsigned char *)malloc(sizeof(unsigned char)*8);
+     x = 7;
+     y = 8;
+     memcpy(contenido,&x,sizeof(int));
+     contenido+=sizeof(int);
+     memcpy(contenido,&y,sizeof(int));
+     contenido-=sizeof(int);
+     reg.setContentReg(contenido);
 
-     memcpy(&x,temp,sizeof(int));
-     temp+=sizeof(int);
-     memcpy(&y,temp,sizeof(int));
+     db.updateRecord(reg,0);
+     free(contenido);
 
-     printf("\nx: %d\n",x);
-     printf("\ny: %d\n",y);
+     db.deleteRecord(0);
+
+     try
+     {
+        reg = db.selectRecord(0);
+
+        unsigned char *temp = reg.getContentReg();
+        //printf("\ncontenido reg:%s\n",reg.getContentReg());
+        x = 0;
+        y = 0;
+
+        memcpy(&x,temp,sizeof(int));
+        temp+=sizeof(int);
+        memcpy(&y,temp,sizeof(int));
+
+        printf("\nx: %d\n",x);
+        printf("\ny: %d\n",y);
+     }
+     catch(SMException ex)
+     {
+         printf("%s",ex.what());
+     }*/
 
      //cout<<md.getrecordsize();
 //    unsigned char *temp = (unsigned char*)malloc(15);

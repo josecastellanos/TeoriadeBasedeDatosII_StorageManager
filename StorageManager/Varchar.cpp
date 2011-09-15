@@ -38,7 +38,7 @@ Varchar::Varchar(unsigned int blockID, unsigned int blockIDMD, unsigned int inde
 }
 unsigned int Varchar::insertVarchar(unsigned char* varchar){
     fstream disco;
-    disco.open(path, ios::binary | ios::out);
+    disco.open(path, ios::binary | ios::in| ios::out);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
@@ -59,7 +59,7 @@ unsigned int Varchar::insertVarchar(unsigned char* varchar){
 }
 void Varchar::escribir(){
     fstream disco;
-    disco.open(path, ios::binary | ios::out);
+    disco.open(path, ios::binary |ios::in| ios::out);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
@@ -74,7 +74,7 @@ void Varchar::escribir(){
 }
 unsigned char* Varchar::selectVarchar(unsigned int index){
     fstream disco;
-    disco.open(path, ios::binary | ios::in);
+    disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
@@ -108,7 +108,7 @@ unsigned char* Varchar::selectVarchar(unsigned int index){
 void Varchar::updateVarchar(unsigned char* varchar, unsigned int index){
 
     fstream disco;
-    disco.open(path, ios::binary | ios::out);
+    disco.open(path, ios::binary |ios::in| ios::out);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
@@ -127,7 +127,7 @@ void Varchar::updateVarchar(unsigned char* varchar, unsigned int index){
 }
 unsigned int Varchar::getEspacioDisponible(){
     fstream disco;
-    disco.open(path, ios::binary | ios::in);
+    disco.open(path, ios::binary |ios::in| ios::out);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
@@ -143,7 +143,7 @@ unsigned int Varchar::getEspacioDisponible(){
 unsigned int Varchar::getBlockIDMD(){
 
     fstream disco;
-    disco.open(path, ios::binary | ios::in);
+    disco.open(path, ios::binary|ios::in| ios::out);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
