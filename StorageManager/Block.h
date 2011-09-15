@@ -5,7 +5,6 @@
 #include <fstream>
 #include <iostream>
 #include <cstdlib>
-#include "Template.h"
 #include "SMException.h"
 
 using namespace std;
@@ -32,8 +31,8 @@ public:
     unsigned int getSig();
     unsigned int getBlockID();
     char* getType();
-    virtual void escribir();
-    virtual unsigned int getEspacioDisponible();
+    void escribir();
+     unsigned int getEspacioDisponible();
 private:
 
 };
