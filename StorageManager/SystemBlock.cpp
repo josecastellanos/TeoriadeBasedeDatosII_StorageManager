@@ -67,7 +67,7 @@ void SystemBlock::acomodarPrimerLibre()
 
         //Avanzo hasta el PrimerLibre para leer su Header.
         offset = temp*4096;
-        disco.seekg(offset+4);
+        disco.seekg(offset);
         Header freeheader;
         disco.read((char*) &freeheader, sizeof(Header));
 

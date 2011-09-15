@@ -2,7 +2,7 @@
 #include "Metadata.h"
 #define path "tablespace.dat"
 
-Metadata::Metadata(unsigned int blockID) : Block(0, 0, 0, "MD") {
+Metadata::Metadata(unsigned int blockID) : Block(0, 0, 0, "MDB") {
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
@@ -35,8 +35,8 @@ void Metadata::escribir() {
     }
 
     unsigned int offset = 4096 * header.blockID;
-    disco.seekp(offset+4);
-    disco.write((const char*) &header, sizeof (header));
+    disco.seekp(offset);
+    disco.write((const char*) &header, sizeof (Block));
     disco.flush();
     disco.write((const char*) &info, sizeof (InfoMD));
     disco.flush();

@@ -68,9 +68,9 @@ void StorageManager::createTableSpace(const char* nombreBD, const char* version,
 void StorageManager::createTable(const char* nombreTabla, unsigned int cant_campos, InfoMDC* campos) {
     SystemBlock SB;
     unsigned  int blockID  = SB.getFree();
+    SB.acomodarPrimerLibre();
     Metadata metadata(blockID, nombreTabla,cant_campos);
     metadata.escribir();
-    SB.acomodarPrimerLibre();
     printf("\nget next free: %u\n",SB.getFree());
 //    if(SB.getPrimerMD()==0){
 //        SB.setPrimerMD(blockID);
