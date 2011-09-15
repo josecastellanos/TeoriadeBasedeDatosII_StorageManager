@@ -1,7 +1,7 @@
 #include "Block.h"
 #define path "tablespace.dat"
 
-Block::Block(unsigned int blockID, unsigned int ant, unsigned int sig, const char* type) : Template() {
+Block::Block(unsigned int blockID, unsigned int ant, unsigned int sig, const char* type) {
     this->header.blockID = blockID;
     this->header.ant = ant;
     this->header.sig = sig;
