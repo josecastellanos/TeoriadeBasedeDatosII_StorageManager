@@ -71,66 +71,67 @@ void StorageManager::createTable(const char* nombreTabla, unsigned int cant_camp
     SB.acomodarPrimerLibre();
     Metadata metadata(blockID, nombreTabla,cant_campos);
     metadata.escribir();
-    printf("\nget next free: %u\n",SB.getFree());
-//    if(SB.getPrimerMD()==0){
-//        SB.setPrimerMD(blockID);
-//    }
-//    SB.setUltimoMD(blockID);
-//    fstream disco;
-//    disco.open(path, ios::binary | ios::in | ios::out);
-//    if (!disco) {
-//         return;
-//    }
 
-//    unsigned int offset = (blockID* 4096) + sizeof (Header) + sizeof (InfoMD);
-//    int temp = (4096 - sizeof (Header) - sizeof (InfoMD)) / sizeof (InfoMDC);
+    if(SB.getPrimerMD()==0){
+        SB.setPrimerMD(blockID);
+    }
+    SB.setUltimoMD(blockID);
+    fstream disco;
+    disco.open(path, ios::binary | ios::in | ios::out);
+    if (!disco) {
+         return;
+    }
 
-//    disco.seekp(offset);
-//    int temp_cant_campos_restantes = cant_campos;
-//    int campo_actual=0;
-//    for (int i = 0; i < temp; i++) {
-//        if (temp_cant_campos_restantes > 0) {
-//            disco.write((const char*) &campos[campo_actual], sizeof (InfoMDC));
-//            disco.flush();
-//            temp_cant_campos_restantes--;
-//            campo_actual++;
-//        } else{
-//            break;
-//        }
+    unsigned int offset = (blockID* 4096) + sizeof (Header) + sizeof (InfoMD);
+    int temp = (4096 - sizeof (Header) - sizeof (InfoMD)) / sizeof (InfoMDC);
 
-//    }
+    disco.seekp(offset);
+    int temp_cant_campos_restantes = cant_campos;
+    int campo_actual=0;
+    for (int i = 0; i < temp; i++) {
+        if (temp_cant_campos_restantes > 0) {
+            disco.write((const char*) &campos[campo_actual], sizeof (InfoMDC));
+            disco.flush();
+            temp_cant_campos_restantes--;
+            campo_actual++;
+        } else{
+            break;
+        }
 
-//            unsigned int BlockID_Ant = blockID;
-//            while (temp_cant_campos_restantes > 0) {
-//                unsigned int free = SB.getFree();
-//                MetadataContinuo MDC(free,blockID);
-//                MDC.escribir();
-//                SB.acomodarPrimerLibre();
+    }
 
-//                if (BlockID_Ant != blockID) {
-//                    MetadataContinuo MDC_ant(BlockID_Ant);
-//                    MDC_ant.setSig(MDC.getBlockID());
-//                }
-//                MDC.setAnt(BlockID_Ant);
-//                offset = (MDC.header.blockID * 4096) + sizeof (Header) + sizeof (InfoCMD);
-//                disco.seekp(offset);
-//                int temp2 = (4096 - sizeof (Header) - sizeof (InfoCMD)) / sizeof (InfoMDC);
-//                for (int a = 0; a < temp2; a++) {
+            unsigned int BlockID_Ant = blockID;
+            while (temp_cant_campos_restantes > 0) {
+                unsigned int free = SB.getFree();
+                SB.acomodarPrimerLibre();
+                MetadataContinuo MDC(free,blockID);
+                MDC.escribir();
 
-//                    if (temp_cant_campos_restantes > 0) {
-//                        disco.write((const char*) &campos[campo_actual], sizeof (InfoMDC));
-//                        disco.flush();
-//                        temp_cant_campos_restantes--;
-//                        campo_actual++;
-//                    }else{
-//                        break;
-//                    }
 
-//                }
+                if (BlockID_Ant != blockID) {
+                    MetadataContinuo MDC_ant(BlockID_Ant);
+                    MDC_ant.setSig(MDC.getBlockID());
+                }
+                MDC.setAnt(BlockID_Ant);
+                offset = (MDC.header.blockID * 4096) + sizeof (Header) + sizeof (InfoCMD);
+                disco.seekp(offset);
+                int temp2 = (4096 - sizeof (Header) - sizeof (InfoCMD)) / sizeof (InfoMDC);
+                for (int a = 0; a < temp2; a++) {
 
-//                BlockID_Ant = MDC.getBlockID();
+                    if (temp_cant_campos_restantes > 0) {
+                        disco.write((const char*) &campos[campo_actual], sizeof (InfoMDC));
+                        disco.flush();
+                        temp_cant_campos_restantes--;
+                        campo_actual++;
+                    }else{
+                        break;
+                    }
 
-//            }
+                }
+
+                BlockID_Ant = MDC.getBlockID();
+
+            }
 
 
 

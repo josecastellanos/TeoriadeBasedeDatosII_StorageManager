@@ -24,11 +24,12 @@ Data::Data(unsigned int blockID):Block(0,0,0,"DB")
 void Data::escribir()
 {
     fstream disco;
-    disco.open(path, ios::binary | ios::out);
+    disco.open(path, ios::binary |ios::in |ios::out);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
 
+    printf("\nid: %u\n",this->header.blockID);
     unsigned int offset = this->header.blockID*4096;
     disco.seekp(offset);
     disco.write((const char*) &header, sizeof (Header));
@@ -223,6 +224,7 @@ void Data::insertRecord(Registro reg)
 
                  SystemBlock SB;
                  unsigned int blockID = SB.getFree();
+                 SB.acomodarPrimerLibre();
                  Varchar vr(blockID,info.blockIDMD,i,campo.size);
                  vr.escribir();
 
@@ -234,7 +236,8 @@ void Data::insertRecord(Registro reg)
                  buffer+=sizeof(unsigned int);
                  memcpy(buffer,&pos,sizeof(unsigned int));
                  buffer+=sizeof(unsigned int);
-                 SB.acomodarPrimerLibre();
+                 free(varchar);
+
 }
 
                  break;
@@ -291,6 +294,7 @@ void Data::insertRecord(Registro reg)
 
                  SystemBlock SB;
                  unsigned int blockID = SB.getFree();
+                 SB.acomodarPrimerLibre();
                  Varchar vr(blockID,info.blockIDMD,i,campo.size);
                  vr.escribir();
 
@@ -302,7 +306,7 @@ void Data::insertRecord(Registro reg)
                  buffer+=sizeof(unsigned int);
                  memcpy(buffer,&pos,sizeof(unsigned int));
                  buffer+=sizeof(unsigned int);
-                 SB.acomodarPrimerLibre();
+
 
 
              }else{
@@ -318,6 +322,7 @@ void Data::insertRecord(Registro reg)
                  }else{
                      SystemBlock SB;
                      unsigned int blockID = SB.getFree();
+                     SB.acomodarPrimerLibre();
                      Varchar vr_new(blockID,info.blockIDMD,i,campo.size);
                      vr_new.escribir();
 
@@ -330,10 +335,13 @@ void Data::insertRecord(Registro reg)
                      buffer+=sizeof(unsigned int);
                      memcpy(buffer,&pos,sizeof(unsigned int));
                      buffer+=sizeof(unsigned int);
-                     SB.acomodarPrimerLibre();
+
 
                  }
              }
+
+             free(varchar_u);
+             free(varchar);
 
          }
                  break;
@@ -354,6 +362,8 @@ void Data::insertRecord(Registro reg)
      disco.seekp(offset);
      disco.write((const char*) &reg, sizeof(InfoReg)+sizeMalloc);
      disco.flush();
+     free(buffer);
+     free(reg.contentReg);
      disco.close();
 }
 
@@ -494,6 +504,8 @@ void Data::updateRecord(Registro _new, unsigned int index)
                             buffer+=sizeof(unsigned int);
                             memcpy(buffer,&pos,sizeof(unsigned int));
                             buffer+=sizeof(unsigned int);
+
+                            free(varchar);
                         }
                         break;
                     case 5://Bool
@@ -513,6 +525,8 @@ void Data::updateRecord(Registro _new, unsigned int index)
         disco.seekp(offset);
         disco.write((const char*) &_new, sizeof(InfoReg) + sizeMalloc);
         disco.flush();
+        free(buffer);
+        free(_new.contentReg);
         disco.close();
 }
 
