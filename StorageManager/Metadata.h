@@ -16,7 +16,7 @@ public:
     Metadata(unsigned int blockID);
     void escribir();
     unsigned int getEspacioDisponible();
-    unsigned int getFreeSpace(int espacio);
+    unsigned int getFreeSpace();
     InfoMDC readCampo(unsigned int index);
     void setCampo(unsigned int index,InfoMDC imdc);
     unsigned int getrecordsize();
