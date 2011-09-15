@@ -10,6 +10,7 @@ Registro::Registro(unsigned short nulos, unsigned int tam, bool tombstone, unsig
     info.nulos = nulos;
     info.tam = tam;
     info.tombstone = tombstone;
+
 }
 
 unsigned char* Registro::readCampo(unsigned int index,unsigned int blockIDMD)
@@ -80,7 +81,7 @@ bool Registro::getTombstone(){
 }
 
 void Registro::setContentReg(unsigned char* contentReg){
-    memcpy(this->contentReg,contentReg,sizeof(contentReg));
+    this->contentReg=contentReg;
 }
 
 unsigned char* Registro::getContentReg(){

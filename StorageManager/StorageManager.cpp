@@ -25,13 +25,6 @@ void StorageManager::createTableSpace(const char* nombreBD, const char* version,
         disco.write((const char*) &SB, sizeof (SystemBlock));
         disco.flush();
 
-//        unsigned int offset = 0;
-//        disco.seekg(offset);
-//        Header h;
-//        disco.read((char*)&SB,sizeof(SystemBlock));
-//        printf("\nalgo del header: %c\n",SB.getFree());
-
-
         unsigned int tam = 4096 - sizeof (SystemBlock);
 
         unsigned char rellenoSB[tam];

@@ -29,7 +29,6 @@ void Data::escribir()
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
 
-    printf("\nid: %u\n",this->header.blockID);
     unsigned int offset = this->header.blockID*4096;
     disco.seekp(offset);
     disco.write((const char*) &header, sizeof (Header));
@@ -181,8 +180,8 @@ void Data::insertRecord(Registro reg)
 
      mapabits nulos(reg.getNulos());
      Metadata md(info.blockIDMD);
-
      unsigned int sizeMalloc = md.getrecordsize();
+
 
 
      unsigned char* buffer = (unsigned char*)malloc(sizeMalloc);
@@ -251,7 +250,7 @@ void Data::insertRecord(Registro reg)
 
 
          }
-         }else{
+      } else{
 
 
          switch(campo.tipo_campo)
@@ -350,21 +349,29 @@ void Data::insertRecord(Registro reg)
              buffer+=sizeof(bool);
              reg.contentReg+=sizeof(bool);
                  break;
-         }
+       }
      }
 
      }
-     reg.contentReg = (unsigned char*)malloc(sizeMalloc);
+//     reg.contentReg = (unsigned char*)malloc(sizeMalloc);
+     buffer-=md.getrecordsize();
     reg.setContentReg(buffer);
     reg.setTam(sizeMalloc);
 
      unsigned int offset = 4096*header.blockID + (4096-getEspacioDisponible());
      disco.seekp(offset);
-     disco.write((const char*) &reg, sizeof(InfoReg)+sizeMalloc);
+     disco.write((const char*) &reg.info, sizeof(InfoReg));
+     disco.write((const char*) reg.contentReg,sizeMalloc);
+
      disco.flush();
-     free(buffer);
-     free(reg.contentReg);
+
+   //  free(reg.contentReg);
      disco.close();
+
+
+     free(buffer);
+     this->setCantRegActivos(this->getCantRegActivos()+1);
+     this->setCantRegFisicos(this->getCantRegFisicos()+1);
 }
 
 // Asignado a Dago
@@ -545,6 +552,14 @@ void Data::deleteRecord(unsigned int index)
     int x=0;
     int cant = getCantRegFisicos();
 
+
+    if(index>=cant)
+    {
+        throw SMException("Index invalido para el bloque de Data " + header.blockID);
+    }
+    else
+    {
+
     for(int i=0; i< cant; i++)
     {
         disco.seekg(offset);
@@ -572,6 +587,7 @@ void Data::deleteRecord(unsigned int index)
         }
         offset+=sizeof(InfoReg) + reg.tam;
     }
+    }
 }
 
 // Asignado a Richard
@@ -589,6 +605,14 @@ Registro Data::selectRecord(unsigned int index)
     int x=0;
     int cant = getCantRegFisicos();
 
+
+    if(index>=cant)
+    {
+        throw SMException("Index invalido para el bloque de Data " + header.blockID);
+    }
+    else
+    {
+
     for(int i=0; i< cant; i++)
     {
         disco.seekg(offset);
@@ -602,9 +626,11 @@ Registro Data::selectRecord(unsigned int index)
         {
             if(x==(int)index)
             {
+                unsigned char *contenido = (unsigned char *)malloc(reg.tam);
+                disco.read((char*)contenido,reg.tam);
                 Registro registro;
-                disco.seekg(offset);
-                disco.read((char*)&registro,sizeof(InfoReg)+reg.tam);
+                registro.info = reg;
+                registro.setContentReg(contenido);
                 return registro;
             }
             else
@@ -614,6 +640,7 @@ Registro Data::selectRecord(unsigned int index)
         }
         offset+=sizeof(InfoReg) + reg.tam;
     }
+    }
 
-    exit(1);
+
 }

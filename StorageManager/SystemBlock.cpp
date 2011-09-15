@@ -73,7 +73,7 @@ void SystemBlock::acomodarPrimerLibre()
 
         //Actualizo el PrimerLibre con el id del nuevo libre
         myinfo.primerLibre=freeheader.sig;
-        printf("\nnext lisbre:%u\n",myinfo.primerLibre);
+
         //Offset para escribir la actualizacion del PrimerLibre
         //en el SystemBlock.
         offset = sizeof(Block);

@@ -43,10 +43,27 @@ int main(int argc, char *argv[])
      contenido+=sizeof(int);
      memcpy(contenido,&y,sizeof(int));
      contenido-=sizeof(int);
+     printf("\not_insert:%p\n",contenido);
+     printf("\ncontenido:%s\n",contenido);
      Registro reg(0,8,false,contenido);
+     reg.setContentReg(contenido);
      db.insertRecord(reg);
      free(contenido);
-     cout<<md.getrecordsize();
+     reg = db.selectRecord(0);
+
+     unsigned char *temp = reg.getContentReg();
+     //printf("\ncontenido reg:%s\n",reg.getContentReg());
+     x = 0;
+     y = 0;
+
+     memcpy(&x,temp,sizeof(int));
+     temp+=sizeof(int);
+     memcpy(&y,temp,sizeof(int));
+
+     printf("\nx: %d\n",x);
+     printf("\ny: %d\n",y);
+
+     //cout<<md.getrecordsize();
 //    unsigned char *temp = (unsigned char*)malloc(15);
 //    unsigned int x=155;
 //    memcpy(temp,&x,sizeof(unsigned int));
@@ -109,6 +126,6 @@ int main(int argc, char *argv[])
 //    cout<<sizeof(InfoMD)<<endl;
 //    cout<<sizeof(InfoMDC)<<endl;
 
-    system("pause");
+
     return 0;
 }
