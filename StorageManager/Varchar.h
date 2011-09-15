@@ -22,8 +22,8 @@ public:
     unsigned char* selectVarchar(unsigned int index);
     void updateVarchar(unsigned char* varchar, unsigned int index);
 
-    virtual void escribir();
-    virtual unsigned int getEspacioDisponible();
+    void escribir();
+    unsigned int getEspacioDisponible();
 
 
     void setBlockIDMD(unsigned int blockIDMD);

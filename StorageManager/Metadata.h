@@ -14,8 +14,8 @@ public:
     Metadata(unsigned int blockID, const char* nombreTabla, unsigned int cant_campos);
 
     Metadata(unsigned int blockID);
-    virtual void escribir();
-    virtual unsigned int getEspacioDisponible();
+    void escribir();
+    unsigned int getEspacioDisponible();
     unsigned int getFreeSpace(int espacio);
     InfoMDC readCampo(unsigned int index);
     void setCampo(unsigned int index,InfoMDC imdc);

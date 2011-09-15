@@ -21,7 +21,7 @@ public:
     Registro selectRecord(unsigned int index);
     void updateRecord(Registro _new,unsigned int index);
     void deleteRecord(unsigned int index);
-    virtual void escribir();
+    void escribir();
     unsigned int getEspacioDisponible();
 
     InfoD info;

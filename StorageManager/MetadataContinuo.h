@@ -16,7 +16,7 @@ public:
     unsigned int getCant_campos();
     unsigned int getBlockIDMD();
     InfoMDC readCampo(unsigned int index);
-    virtual void escribir();
+    void escribir();
     unsigned int getEspacioDisponible();
     void setCampo(unsigned int index,InfoMDC imdc);
 
