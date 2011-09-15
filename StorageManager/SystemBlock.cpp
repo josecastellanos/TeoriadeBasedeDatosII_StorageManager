@@ -15,14 +15,14 @@ unsigned int SystemBlock::getFree()
 {
     fstream disco;
     //Abro el archivo, sino se puede retorno 0
-    disco.open(path, ios::binary | ios::in | ios::out);
+    disco.open(path, ios::binary |ios::in);
     //disco.open("/home/mairen/jj.dat", ios::binary | ios::in | ios::out);
 
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     //Avanzo hasta despues del Header
-    unsigned int offset = sizeof(Header);
+    unsigned int offset = sizeof(Block);
     disco.seekg(offset);
 
     //Leo la Info del bloque se Sistema
@@ -55,7 +55,7 @@ void SystemBlock::acomodarPrimerLibre()
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     //Avanzo hasta despues del Header
-    unsigned int offset = sizeof(Header);
+    unsigned int offset = sizeof(Block);
     disco.seekg(offset);
 
     //Leo la Info del bloque se Sistema
@@ -67,15 +67,16 @@ void SystemBlock::acomodarPrimerLibre()
 
         //Avanzo hasta el PrimerLibre para leer su Header.
         offset = temp*4096;
-        disco.seekg(offset);
+        disco.seekg(offset+4);
         Header freeheader;
         disco.read((char*) &freeheader, sizeof(Header));
 
         //Actualizo el PrimerLibre con el id del nuevo libre
         myinfo.primerLibre=freeheader.sig;
+        printf("\nnext lisbre:%u\n",myinfo.primerLibre);
         //Offset para escribir la actualizacion del PrimerLibre
         //en el SystemBlock.
-        offset = sizeof(Header);
+        offset = sizeof(Block);
         disco.seekp(offset);
         disco.write((const char*) &myinfo, sizeof(InfoSB));
         disco.flush();

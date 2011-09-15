@@ -5,6 +5,7 @@
 #include <string>
 #include "SystemBlock.h"
 #include "Metadata.h"
+#include <stdio.h>
 
 class StorageManager {
 public:

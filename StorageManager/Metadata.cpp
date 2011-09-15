@@ -29,14 +29,14 @@ Metadata::Metadata(unsigned int blockID,const char* nombreTabla, unsigned int ca
 
 void Metadata::escribir() {
     fstream disco;
-    disco.open(path, ios::binary | ios::out);
+    disco.open(path, ios::binary | ios::in |ios::out);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
 
     unsigned int offset = 4096 * header.blockID;
-    disco.seekp(offset);
-    disco.write((const char*) &header, sizeof (Block));
+    disco.seekp(offset+4);
+    disco.write((const char*) &header, sizeof (header));
     disco.flush();
     disco.write((const char*) &info, sizeof (InfoMD));
     disco.flush();

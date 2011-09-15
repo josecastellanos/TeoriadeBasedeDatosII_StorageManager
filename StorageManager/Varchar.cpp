@@ -83,7 +83,7 @@ unsigned char* Varchar::selectVarchar(unsigned int index){
 
     unsigned int max_size=this->getMax_size();
     //Agregue la siguiente Linea para asignar el espacio a varchar
-    unsigned char* varchar=(char*)malloc(max_size);
+    unsigned char* varchar=(unsigned char*)malloc(max_size);
     
 
     offset+=index*max_size;
