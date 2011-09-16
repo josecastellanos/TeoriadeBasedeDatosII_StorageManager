@@ -42,28 +42,31 @@ void Data::escribir()
 unsigned int Data::getEspacioDisponible()
 {
     fstream disco;
-    disco.open(path, ios::binary | ios::in);
+    disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
     disco.seekg(offset);
     disco.read((char*) &info, sizeof (InfoD));
-    disco.close();
+
 
     InfoReg tempInfo;
     offset += sizeof(InfoD);
 
     unsigned int offset2 = sizeof(Header)+sizeof(InfoD);
+    printf("\ncanfisicos: %u\n",info.cantRegFisicos);
 
     for(int i=0; i<(int)info.cantRegFisicos; i++)
     {
         disco.seekg(offset);
         disco.read((char*) &tempInfo, sizeof(InfoReg));
-
+        printf("\nsizeof(inforeg)%u\n",sizeof(InfoReg));
+        printf("tam %u\n",tempInfo.tam);
         offset += sizeof(InfoReg) + tempInfo.tam;
         offset2 += sizeof(InfoReg) + tempInfo.tam;
     }
+     disco.close();
 
     return 4096 - offset2;
 }
@@ -181,11 +184,11 @@ void Data::insertRecord(Registro reg)
      mapabits nulos(reg.getNulos());
      Metadata md(info.blockIDMD);
      unsigned int sizeMalloc = md.getrecordsize();
-
+     printf("\ntamaño: %u\n",reg.info.tam);
 
 
      unsigned char* buffer = (unsigned char*)malloc(sizeMalloc);
-     printf("\nin buffer %p\n",buffer);
+
 
      for(int i=0; i<(int)md.getCant_campos(); i++)
      {
@@ -312,7 +315,7 @@ void Data::insertRecord(Registro reg)
                  Varchar vr(varcharID);
                  unsigned int freespace = vr.getEspacioDisponible();
                  if(freespace>=vr.getMax_size()){
-                     printf("\nesta aqui 2\n");
+
                     unsigned int pos=  vr.insertVarchar(varchar);
                     memcpy(buffer,&varcharID,sizeof(unsigned int));
                     buffer+=sizeof(unsigned int);
@@ -320,7 +323,7 @@ void Data::insertRecord(Registro reg)
                     buffer+=sizeof(unsigned int);
 
                  }else{
-                     printf("\nesta aqui 3\n");
+
                      SystemBlock SB;
                      unsigned int blockID = SB.getFree();
                      SB.acomodarPrimerLibre();
@@ -355,20 +358,20 @@ void Data::insertRecord(Registro reg)
      }
 
      }
-//     reg.contentReg = (unsigned char*)malloc(sizeMalloc);
-     buffer-=md.getrecordsize();
-     printf("\nbuffer %p\n",buffer);
+
+    buffer-=md.getrecordsize();
     reg.setContentReg(buffer);
     reg.setTam(sizeMalloc);
 
      unsigned int offset = 4096*header.blockID + (4096-getEspacioDisponible());
+     printf("\nsize del reg: %u\n",(sizeof(reg.info)+sizeMalloc));
+    // printf("espaciodisponible: %u\n",getEspacioDisponible());
+     printf("offset: %u\n",offset);
      disco.seekp(offset);
      disco.write((const char*) &reg.info, sizeof(InfoReg));
      disco.write((const char*) reg.contentReg,sizeMalloc);
 
      disco.flush();
-
-   //  free(reg.contentReg);
      disco.close();
 
 
