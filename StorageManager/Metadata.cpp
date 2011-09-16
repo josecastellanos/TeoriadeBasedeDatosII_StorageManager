@@ -46,7 +46,7 @@ void Metadata::escribir() {
 
 char* Metadata::get_nombreTabla() {
     fstream disco;
-    disco.open(path, ios::binary | ios::in);
+    disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
@@ -61,7 +61,7 @@ char* Metadata::get_nombreTabla() {
 
 unsigned int Metadata::getCant_campos() {
     fstream disco;
-    disco.open(path, ios::binary | ios::in);
+    disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
@@ -74,7 +74,7 @@ unsigned int Metadata::getCant_campos() {
 
 unsigned int Metadata::getFinalBD() {
     fstream disco;
-    disco.open(path, ios::binary | ios::in);
+    disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
@@ -88,7 +88,7 @@ unsigned int Metadata::getFinalBD() {
 
 unsigned int Metadata::getInicio_BD() {
     fstream disco;
-    disco.open(path, ios::binary | ios::in);
+    disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
@@ -101,7 +101,7 @@ unsigned int Metadata::getInicio_BD() {
 
 unsigned int Metadata::getFinal_MDCont() {
     fstream disco;
-    disco.open(path, ios::binary | ios::in);
+    disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
@@ -115,7 +115,7 @@ unsigned int Metadata::getFinal_MDCont() {
 
 unsigned int Metadata::getInicio_MDCont() {
     fstream disco;
-    disco.open(path, ios::binary | ios::in);
+    disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }

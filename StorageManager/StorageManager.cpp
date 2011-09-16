@@ -10,7 +10,7 @@ void StorageManager::createTableSpace(const char* nombreBD, const char* version,
     if (cantBloques > 1) {
         fstream disco;
 
-        disco.open(path, ios::binary | ios::out);
+        disco.open(path, ios::binary | ios::in | ios::out);
         if (!disco) {
             throw SMException("No se pudo abrir el archivo tablespace.dat");
         }

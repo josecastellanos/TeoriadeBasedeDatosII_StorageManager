@@ -15,7 +15,7 @@ unsigned int SystemBlock::getFree()
 {
     fstream disco;
     //Abro el archivo, sino se puede retorno 0
-    disco.open(path, ios::binary |ios::in);
+    disco.open(path, ios::binary | ios::in | ios::out);
     //disco.open("/home/mairen/jj.dat", ios::binary | ios::in | ios::out);
 
     if (!disco) {

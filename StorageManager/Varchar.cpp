@@ -11,7 +11,7 @@
 
 Varchar::Varchar(unsigned int blockID):Block(0,0,0,"VB") {
     fstream disco;
-    disco.open(path, ios::binary | ios::in);
+    disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {
         throw SMException("No se pudo abrir el archivo tablespace.dat");
     }
