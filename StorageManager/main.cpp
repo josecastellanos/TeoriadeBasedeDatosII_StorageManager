@@ -20,8 +20,8 @@ int main(int argc, char *argv[])
     campo1.tipo_campo=1;
     InfoMDC campo2;
     strcpy(campo2.nombre_campo,"campo2");
-    campo2.tipo_campo=1;
-    //campo2.tipo_campo=4;
+    //campo2.tipo_campo=1;
+    campo2.tipo_campo=4;
     campo2.size=10;
     campo2.inicio_varchar=0;
     campo2.final_varchar=0;
@@ -88,38 +88,91 @@ int main(int argc, char *argv[])
 
      //Probando doble insert
 
-    unsigned char *contenido = (unsigned char *)malloc(8);
+          unsigned char *temp = (unsigned char*)malloc(7);
+          printf("\ntemp: %p\n",temp);
+          unsigned char y = 5;
+              memcpy(temp,&y,sizeof(unsigned char));
+              temp+=sizeof(unsigned char);
+              string z = "Maria";
+              //char* cadena = (char*)z.c_str();
+              memcpy(temp,z.c_str(),(int)y+1);
+              //temp+=y+1;
+              temp-=sizeof(unsigned char);
+              temp[6]='\0';
+             printf("\ntemp: %p\n",temp);
+
+    unsigned char *contenido = (unsigned char *)malloc(11);
     printf("\ncontenido p: %p\n",contenido);
 
-    int x = 6;
-    int y = 77;
-     memcpy(contenido,&x,sizeof(int));
-     contenido+=sizeof(int);
-     memcpy(contenido,&y,sizeof(int));
-     //memcpy(contenido,temp,7);
-     contenido-=(sizeof(int));
+              int x = 6;
+              //int y = 77;
+          memcpy(contenido,&x,sizeof(int));
+          contenido+=sizeof(int);
+          //memcpy(contenido,&y,sizeof(int));
+          memcpy(contenido,temp,7);
+          contenido-=(sizeof(int));
 
-     Registro reg(0,8,false,contenido);
+     Registro reg(0,11,false,contenido);
      reg.setContentReg(contenido);
      db.insertRecord(reg);
      free(contenido);
 
 
-     unsigned char *contenido2 = (unsigned char *)malloc(8);
-     printf("\ncontenido p: %p\n",contenido2);
+     unsigned char *contenido2 = (unsigned char *)malloc(11);
 
-     int x2 = 99;
-     int y2 = 76;
+     unsigned char *temp2 = (unsigned char*)malloc(7);
+     printf("\ntemp: %p\n",temp2);
+     y = 5;
+         memcpy(temp2,&y,sizeof(unsigned char));
+         temp2+=sizeof(unsigned char);
+         z = "Pedro";
+         //char* cadena = (char*)z.c_str();
+         memcpy(temp2,z.c_str(),(int)y+1);
+         //temp+=y+1;
+         temp2-=sizeof(unsigned char);
+         temp2[6]='\0';
+        //printf("\ntemp: %p\n",temp2);
+
+     int x2 = 100;
+
       memcpy(contenido2,&x2,sizeof(int));
       contenido2+=sizeof(int);
-      memcpy(contenido2,&y2,sizeof(int));
-      //memcpy(contenido,temp,7);
+      //memcpy(contenido2,&y2,sizeof(int));
+      memcpy(contenido2,temp2,7);
       contenido2-=(sizeof(int));
 
-      Registro reg2(0,8,false,contenido2);
+      Registro reg2(0,11,false,contenido2);
       reg2.setContentReg(contenido2);
       db.insertRecord(reg2);
       free(contenido2);
+
+      unsigned char *contenido3 = (unsigned char *)malloc(11);
+
+      unsigned char *temp3 = (unsigned char*)malloc(7);
+      printf("\ntemp: %p\n",temp3);
+      y = 5;
+          memcpy(temp3,&y,sizeof(unsigned char));
+          temp3+=sizeof(unsigned char);
+          z = "Buuuu";
+          //char* cadena = (char*)z.c_str();
+          memcpy(temp3,z.c_str(),(int)y+1);
+          //temp+=y+1;
+          temp3-=sizeof(unsigned char);
+          temp3[6]='\0';
+         printf("\ntemp: %p\n",temp3);
+
+      int x3 = 99;
+      //int y3 = 76;
+       memcpy(contenido3,&x3,sizeof(int));
+       contenido3+=sizeof(int);
+       //memcpy(contenido3,&y3,sizeof(int));
+       memcpy(contenido3,temp3,7);
+       contenido3-=(sizeof(int));
+
+       Registro reg3(0,11,false,contenido3);
+       reg3.setContentReg(contenido3);
+      db.updateRecord(reg3,0);
+      free(contenido3);
 
 //------------------------------------------------------------------------------------------------*/
 
@@ -139,12 +192,14 @@ int main(int argc, char *argv[])
 
      try
      {
-        reg = db.selectRecord(1);
+        reg = db.selectRecord(0);
 
-        unsigned char *temp = reg.getContentReg();
-       // unsigned char *temp = reg.readCampo(1,md.header.blockID); //Esto es para varchar
+        //unsigned char *temp = reg.getContentReg();
+        unsigned char *_temp = reg.readCampo(1,md.header.blockID); //Esto es para varchar
+        printf("\n%s\n",_temp)   ;
 
-        x = 0;
+
+        /*x = 0;
         y = 0;
 
         memcpy(&x,temp,sizeof(int));
@@ -152,7 +207,7 @@ int main(int argc, char *argv[])
         memcpy(&y,temp,sizeof(int));
 
         printf("\nx: %d\n",x);
-        printf("y: %d\n",y);
+        printf("y: %d\n",y);*/
      }
      catch(SMException ex)
      {

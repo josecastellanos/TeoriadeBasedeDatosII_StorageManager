@@ -194,7 +194,7 @@ void Varchar::setCant_varchars(unsigned int cantidad){
     unsigned int offset=(4096*header.blockID)+sizeof(Header);
     disco.seekg(offset);
     disco.read((char*) &info, sizeof (InfoV));
-    info.blockIDMD = cantidad;
+    info.cant_varchars = cantidad;
     disco.seekp(offset);
     disco.write((const char*) &info, sizeof(InfoV));
     disco.flush();

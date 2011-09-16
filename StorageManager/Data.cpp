@@ -474,10 +474,13 @@ void Data::updateRecord(Registro _new, unsigned int index)
                         {
                             //Poner en el API que me manden con terminacion nula la cadena, y poner en varchar que recibe char* y cambiar el max_size sumarle 1
                             unsigned int bIDV, pos;
+                            printf("Llego aquiii!!!");
                             memcpy(&bIDV,_old.contentReg,sizeof(unsigned int));
                             _old.contentReg+=sizeof(unsigned int);
                             memcpy(&pos,_old.contentReg,sizeof(unsigned int));
                             _old.contentReg+=sizeof(unsigned int);
+
+                            printf("%u %u",bIDV,pos);
 
                             Varchar vb(bIDV);                            
 
@@ -491,6 +494,7 @@ void Data::updateRecord(Registro _new, unsigned int index)
                                 memcpy(varchar,&tam,sizeof(unsigned char));
                                 varchar+=sizeof(unsigned char);
                                 memcpy(varchar,_new.contentReg,(int)tam+1);
+                                varchar-=sizeof(unsigned char);
                                 _new.contentReg+=(int)tam+1;
 
                                 int i;
