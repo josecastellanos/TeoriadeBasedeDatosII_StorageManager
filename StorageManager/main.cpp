@@ -75,11 +75,35 @@ int main(int argc, char *argv[])
      printf("\ncontenido p: %p\n",contenido);
      printf("\not_insert:%p\n",contenido);
      //printf("\ncontenido:%s\n",contenido);
-     Registro reg(0,11,false,contenido);
+
+     //unsigned char *copia = contenido;
+
+     Registro reg(0,11,false,contenido); //con varchar
+     //Registro reg(0,8,false,contenido); //solo con dos ints
      reg.setContentReg(contenido);
      db.insertRecord(reg);
-     //db.insertRecord(reg);
      free(contenido);
+
+/*//------------------------------------------------------------------------------------------------
+
+     //Probando doble insert
+
+    contenido = (unsigned char *)malloc(8);
+    printf("\ncontenido p: %p\n",contenido);
+
+    x = 6;
+    y = 77;
+     memcpy(contenido,&x,sizeof(int));
+     contenido+=sizeof(int);
+     memcpy(contenido,&y,sizeof(int));
+     //memcpy(contenido,temp,7);
+     contenido-=(sizeof(int));
+
+     reg.setContentReg(contenido);
+     db.insertRecord(reg);
+     free(contenido);
+
+//------------------------------------------------------------------------------------------------*/
 
      /*contenido = (unsigned char *)malloc(sizeof(unsigned char)*8);
      x = 7;
@@ -99,8 +123,9 @@ int main(int argc, char *argv[])
      {
         reg = db.selectRecord(0);
 
-        unsigned char *temp = reg.readCampo(0,md.header.blockID);
-        printf("\ncontenido reg:%d\n",*temp);
+        //unsigned char *temp = reg.getContentReg();
+        unsigned char *temp = reg.readCampo(1,md.header.blockID); //Esto es para varchar
+        printf("\ncontenido reg:%s\n",temp);
         /*x = 0;
         y = 0;
 
