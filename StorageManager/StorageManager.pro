@@ -5,8 +5,8 @@
 #-------------------------------------------------
 
 QT       += core
+QT       += core gui
 
-QT       -= gui
 
 TARGET = StorageManager
 CONFIG   += console
@@ -32,7 +32,8 @@ SOURCES += main.cpp \
     InfoCMD.cpp \
     InfoReg.cpp \
     InfoV.cpp \
-    InfoD.cpp
+    InfoD.cpp \
+    mainwindow.cpp
 
 HEADERS += \
     Block.h \
@@ -51,4 +52,8 @@ HEADERS += \
     Registro.h \
     InfoReg.h \
     InfoV.h \
-    InfoD.h
+    InfoD.h \
+    mainwindow.h
+
+FORMS += \
+    mainwindow.ui
