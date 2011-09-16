@@ -185,7 +185,7 @@ void Data::insertRecord(Registro reg)
 
 
      unsigned char* buffer = (unsigned char*)malloc(sizeMalloc);
-     printf("\nbuffer %p\n",buffer);
+     printf("\nin buffer %p\n",buffer);
 
      for(int i=0; i<(int)md.getCant_campos(); i++)
      {

@@ -20,7 +20,8 @@ int main(int argc, char *argv[])
     campo1.tipo_campo=1;
     InfoMDC campo2;
     strcpy(campo2.nombre_campo,"campo2");
-    campo2.tipo_campo=4;
+    campo2.tipo_campo=1;
+    //campo2.tipo_campo=4;
     campo2.size=10;
     campo2.inicio_varchar=0;
     campo2.final_varchar=0;
@@ -40,9 +41,15 @@ int main(int argc, char *argv[])
      md.setInicio_BD(bid);
      md.setFinalBD(bid);
 
-     unsigned char *contenido = (unsigned char *)malloc(sizeof(unsigned char)*11);
+     //unsigned char *contenido = (unsigned char *)malloc(sizeof(unsigned char)*11);
+     unsigned char *contenido = (unsigned char *)malloc(8);
     printf("\ncontenido p: %p\n",contenido);
-     unsigned char *temp = (unsigned char*)malloc(7);
+
+//----------------------------------------------------------------------------------
+
+    //Esto es para probar lo de varchars
+
+     /*unsigned char *temp = (unsigned char*)malloc(7);
      printf("\ntemp: %p\n",temp);
      unsigned char y = 5;
          memcpy(temp,&y,sizeof(unsigned char));
@@ -53,22 +60,28 @@ int main(int argc, char *argv[])
          //temp+=y+1;
          temp-=sizeof(unsigned char);
          temp[6]='\0';
-        printf("\ntemp: %p\n",temp);
-         int x = 5;
+        printf("\ntemp: %p\n",temp);*/
+
+//-----------------------------------------------------------------------------------------
+
+         int x = 6;
+         int y = 77;
      memcpy(contenido,&x,sizeof(int));
      contenido+=sizeof(int);
-     memcpy(contenido,temp,7);
+     memcpy(contenido,&y,sizeof(int));
+     //memcpy(contenido,temp,7);
      contenido-=(sizeof(int));
 
      printf("\ncontenido p: %p\n",contenido);
      printf("\not_insert:%p\n",contenido);
-     printf("\ncontenido:%s\n",contenido);
+     //printf("\ncontenido:%s\n",contenido);
      Registro reg(0,8,false,contenido);
      reg.setContentReg(contenido);
      db.insertRecord(reg);
+     //db.insertRecord(reg);
      free(contenido);
 
-     /*contenido = (unsigned char *)malloc(sizeof(unsigned char)*8);
+     contenido = (unsigned char *)malloc(sizeof(unsigned char)*8);
      x = 7;
      y = 8;
      memcpy(contenido,&x,sizeof(int));
@@ -80,7 +93,7 @@ int main(int argc, char *argv[])
      db.updateRecord(reg,0);
      free(contenido);
 
-     db.deleteRecord(0);
+     //db.deleteRecord(0);
 
      try
      {
@@ -101,7 +114,9 @@ int main(int argc, char *argv[])
      catch(SMException ex)
      {
          printf("%s",ex.what());
-     }*/
+     }
+
+     //De aqui para abajo no parar bola
 
      //cout<<md.getrecordsize();
 //    unsigned char *temp = (unsigned char*)malloc(15);
