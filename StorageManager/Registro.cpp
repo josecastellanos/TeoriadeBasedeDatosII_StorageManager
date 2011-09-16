@@ -36,11 +36,30 @@ unsigned char* Registro::readCampo(unsigned int index,unsigned int blockIDMD)
                 throw SMException("Ese tipo de campo no es Soportado");
             }
 
+            mapabits m(inf.nulls);
+            if(m.getAt(i))
+            {
+                return 0;
+            }
+
             resul = (unsigned char*)malloc(val);
             this->contentReg += off;
             memcpy(resul,this->contentReg,val);
             this->contentReg -= off;
 
+            if(inf.tipo_campo == 4) // es varchar   BidV / Index
+            {
+                unsigned int BidV,indice;
+                memcpy(&BidV,resul,sizeof(unsigned int));
+                resul += sizeof(unsigned int);
+                memcpy(&indice,resul,sizeof(unsigned int));
+
+                //VARCHARRR---
+
+                Varchar varchar(BidV);
+                return varchar.selectVarchar(indice);
+
+            }
             return resul;
         }
         else
