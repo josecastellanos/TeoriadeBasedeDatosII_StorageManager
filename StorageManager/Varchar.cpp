@@ -18,7 +18,7 @@ Varchar::Varchar(unsigned int blockID):Block(0,0,0,"VB") {
     unsigned int offset=4096*blockID;
     disco.seekg(offset);
     disco.read((char*) &header,sizeof(Header));
-    //disco.read((char*) &info,sizeof(InfoV));
+    disco.read((char*) &info,sizeof(InfoV));
     disco.close();
 
 

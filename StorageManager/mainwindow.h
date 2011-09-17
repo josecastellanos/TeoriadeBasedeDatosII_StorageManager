@@ -32,8 +32,9 @@ private slots:
 private:
     Ui::MainWindow *ui;
     StorageManager *SM;
+    SystemBlock *sb;
+    Metadata *md;
     int x;
-    int bid;
     InfoMDC *inf;
 };
 

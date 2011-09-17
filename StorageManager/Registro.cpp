@@ -10,6 +10,7 @@ Registro::Registro(unsigned short nulos, unsigned int tam, bool tombstone, unsig
     info.nulos = nulos;
     info.tam = tam;
     info.tombstone = tombstone;
+    this->contentReg = contentReg;
 
 }
 

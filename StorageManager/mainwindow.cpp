@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
     SM = new StorageManager();
-    bid = 1;
+    sb = new SystemBlock();
 }
 
 MainWindow::~MainWindow()
@@ -35,7 +35,7 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    InfoMDC info();
+    InfoMDC info;
     strcpy(info.nombre_campo,ui->lnNombreCampo->text().toStdString().c_str());
     strcpy(info.DEFAULT,ui->lnDefault->text().toStdString().c_str());
     info.tipo_campo = ui->spinTipo->value();
@@ -50,10 +50,9 @@ void MainWindow::on_pushButton_2_clicked()
     info.PK = ui->chkPK->isChecked();
     info.nulls = ui->chkNull->isChecked();
 
-    inf[x] = info;
-    x++;
+    inf[x++] = info;
 
-    ui->listWidget->addItem(ui->lnNombreCampo);
+    ui->listWidget->addItem(ui->lnNombreCampo->text());
 
     ui->lnNombreBD->setText("");
     ui->lnDefault->setText("");
@@ -67,7 +66,21 @@ void MainWindow::on_pushButton_3_clicked()
 {
     SM->createTable(ui->lnNombreTabla->text().toStdString().c_str(),
                     ui->spinCantidad->value(),inf);
-    ui->stackedWidget->setCurrentIndex(3);
 
-    QMessageBox::about(0,"BlockID Tabla",QString::number(bid++));
+    QMessageBox::about(0,"BIDMD",QString::number(sb->getFree()-1));
+
+    md = new Metadata(sb->getFree()-1);
+
+    unsigned int bid = sb->getFree();
+    sb->acomodarPrimerLibre();
+
+    Data db(bid,md->header.blockID);
+    db.escribir();
+
+    md->setInicio_BD(bid);
+    md->setFinalBD(bid);
+
+    QMessageBox::about(0,"BlockID de Data",QString::number(bid));
+
+    ui->stackedWidget->setCurrentIndex(3);
 }

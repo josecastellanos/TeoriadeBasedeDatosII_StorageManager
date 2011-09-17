@@ -68,7 +68,14 @@ void StorageManager::createTable(const char* nombreTabla, unsigned int cant_camp
     if(SB.getPrimerMD()==0){
         SB.setPrimerMD(blockID);
     }
+    if(SB.getUltimoMD()!=0)
+    {
+        Metadata temp(SB.getUltimoMD());
+        temp.setSig(blockID);
+        metadata.setAnt(SB.getUltimoMD());
+    }
     SB.setUltimoMD(blockID);
+
     fstream disco;
     disco.open(path, ios::binary | ios::in | ios::out);
     if (!disco) {

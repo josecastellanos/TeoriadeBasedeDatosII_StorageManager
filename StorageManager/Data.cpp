@@ -18,6 +18,7 @@ Data::Data(unsigned int blockID):Block(0,0,0,"DB")
     unsigned int offset=4096*blockID;
     disco.seekg(offset);
     disco.read((char*) &header, sizeof(Header));
+    disco.read((char*) &info, sizeof(InfoD));
     disco.close();
 }
 
@@ -183,9 +184,10 @@ void Data::insertRecord(Registro reg)
 
      mapabits nulos(reg.getNulos());
      Metadata md(info.blockIDMD);
+     printf("%u",info.blockIDMD);
      unsigned int sizeMalloc = md.getrecordsize();
      printf("\ntamaño: %u\n",reg.info.tam);
-
+     printf("%d\n",md.getCant_campos());
 
      unsigned char* buffer = (unsigned char*)malloc(sizeMalloc);
 

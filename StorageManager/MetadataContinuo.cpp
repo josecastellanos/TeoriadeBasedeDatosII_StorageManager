@@ -16,6 +16,7 @@ MetadataContinuo::MetadataContinuo(unsigned int blockID):Block(0,0,0,"MDCB"){
     unsigned int offset=4096*blockID;
     disco.seekg(offset);
     disco.read((char*) &header, sizeof(Header));
+    disco.read((char*) &info, sizeof(InfoCMD));
     disco.close();
 }
 
