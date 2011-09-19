@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Fri Sep 16 20:52:36 2011
+** Created: Sun Sep 18 18:38:36 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+      17,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -35,6 +35,19 @@ static const uint qt_meta_data_MainWindow[] = {
       34,   11,   11,   11, 0x08,
       58,   11,   11,   11, 0x08,
       84,   11,   11,   11, 0x08,
+     110,   11,   11,   11, 0x08,
+     136,   11,   11,   11, 0x08,
+     162,   11,   11,   11, 0x08,
+     189,   11,   11,   11, 0x08,
+     215,   11,   11,   11, 0x08,
+     239,   11,   11,   11, 0x08,
+     263,   11,   11,   11, 0x08,
+     287,   11,   11,   11, 0x08,
+     311,   11,   11,   11, 0x08,
+     338,   11,   11,   11, 0x08,
+     364,   11,   11,   11, 0x08,
+     389,   11,   11,   11, 0x08,
+     416,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -44,6 +57,17 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "on_pushButton_clicked()\0"
     "on_pushButton_2_clicked()\0"
     "on_pushButton_3_clicked()\0"
+    "on_pushButton_4_clicked()\0"
+    "on_pushButton_5_clicked()\0"
+    "on_pushButton_10_clicked()\0"
+    "on_pushButton_6_clicked()\0"
+    "on_btnCrear_2_clicked()\0on_btnCrear_3_clicked()\0"
+    "on_btnCrear_4_clicked()\0on_btnCrear_5_clicked()\0"
+    "on_pushButton_11_clicked()\0"
+    "on_pushButton_7_clicked()\0"
+    "on_btnCrear_16_clicked()\0"
+    "on_pushButton_34_clicked()\0"
+    "on_pushButton_8_clicked()\0"
 };
 
 const QMetaObject MainWindow::staticMetaObject = {
@@ -79,9 +103,22 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 1: on_pushButton_clicked(); break;
         case 2: on_pushButton_2_clicked(); break;
         case 3: on_pushButton_3_clicked(); break;
+        case 4: on_pushButton_4_clicked(); break;
+        case 5: on_pushButton_5_clicked(); break;
+        case 6: on_pushButton_10_clicked(); break;
+        case 7: on_pushButton_6_clicked(); break;
+        case 8: on_btnCrear_2_clicked(); break;
+        case 9: on_btnCrear_3_clicked(); break;
+        case 10: on_btnCrear_4_clicked(); break;
+        case 11: on_btnCrear_5_clicked(); break;
+        case 12: on_pushButton_11_clicked(); break;
+        case 13: on_pushButton_7_clicked(); break;
+        case 14: on_btnCrear_16_clicked(); break;
+        case 15: on_pushButton_34_clicked(); break;
+        case 16: on_pushButton_8_clicked(); break;
         default: ;
         }
-        _id -= 4;
+        _id -= 17;
     }
     return _id;
 }

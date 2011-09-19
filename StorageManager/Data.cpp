@@ -212,7 +212,7 @@ void Data::insertRecord(Registro reg)
                  buffer+=sizeof(double);
                  break;
                 case 3:
-                 for(int s=0; s<(int)campo.size;s++){
+                 for(int s=0; s<(int)campo.size+1;s++){
                      buffer[s]='#';
                  }
                  buffer+=campo.size;
@@ -272,9 +272,9 @@ void Data::insertRecord(Registro reg)
              reg.contentReg+=sizeof(double);
                  break;
              case 3://Char
-             memcpy(buffer,reg.contentReg,campo.size);
-             buffer+=campo.size;
-             reg.contentReg+=campo.size;
+             memcpy(buffer,reg.contentReg,campo.size+1);
+             buffer+=campo.size+1;
+             reg.contentReg+=campo.size+1;
 
                  break;
              case 4://Varchar
@@ -429,10 +429,10 @@ void Data::updateRecord(Registro _new, unsigned int index)
                     buffer+=sizeof(double);
                     break;
                    case 3:
-                    for(int s=0; s<(int)campo.size;s++){
+                    for(int s=0; s<(int)campo.size+1;s++){
                         buffer[s]='#';
                     }
-                    buffer+=campo.size;
+                    buffer+=campo.size+1;
                     break;
 
                 case 4:
@@ -467,10 +467,10 @@ void Data::updateRecord(Registro _new, unsigned int index)
                         _new.contentReg+=sizeof(double);
                         break;
                     case 3://Char
-                        memcpy(buffer,_new.contentReg,campo.size);
-                        buffer+=campo.size;
-                            _old.contentReg+=campo.size;
-                        _new.contentReg+=campo.size;
+                        memcpy(buffer,_new.contentReg,campo.size+1);
+                        buffer+=campo.size+1;
+                            _old.contentReg+=campo.size+1;
+                        _new.contentReg+=campo.size+1;
                         break;
                     case 4://Varchar
                         {
@@ -487,6 +487,8 @@ void Data::updateRecord(Registro _new, unsigned int index)
                             Varchar vb(bIDV);                            
 
                             unsigned char *varchar = (unsigned char*)malloc(1+campo.size+1);
+
+                            printf("\nvarchar %p\n",varchar);
 
                             if(!nulos_new.getAt(i))
                             {
@@ -523,6 +525,10 @@ void Data::updateRecord(Registro _new, unsigned int index)
                             buffer+=sizeof(unsigned int);
                             memcpy(buffer,&pos,sizeof(unsigned int));
                             buffer+=sizeof(unsigned int);
+
+                            printf("\nvarchar %p\n",varchar);
+
+                            printf("\n%s\n",varchar);
 
                             free(varchar);
                         }

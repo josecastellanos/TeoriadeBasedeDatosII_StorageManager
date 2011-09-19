@@ -30,7 +30,7 @@ unsigned char* Registro::readCampo(unsigned int index,unsigned int blockIDMD)
             int val;
             if(inf.tipo_campo==1){val=sizeof(int);}
             else if(inf.tipo_campo==2){val=sizeof(double);}
-            else if(inf.tipo_campo==3){val=inf.size;}
+            else if(inf.tipo_campo==3){val=inf.size+1;}
             else if(inf.tipo_campo==4){val=(sizeof(int) + sizeof(int) );}
             else if(inf.tipo_campo==5){val=sizeof(bool);}
             else{
@@ -67,7 +67,7 @@ unsigned char* Registro::readCampo(unsigned int index,unsigned int blockIDMD)
         {
             if(inf.tipo_campo==1){off+=sizeof(int);}// es int
             else if(inf.tipo_campo==2){off+=sizeof(double);} // es double
-            else if(inf.tipo_campo==3){off+=inf.size;} // es char
+            else if(inf.tipo_campo==3){off+=inf.size+1;} // es char
             else if(inf.tipo_campo==4){off+=(sizeof(int) + sizeof(int) );} // es Varchar
             else if(inf.tipo_campo==5){off+=sizeof(bool);} // es bool
         }

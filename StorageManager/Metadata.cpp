@@ -264,7 +264,7 @@ unsigned int Metadata::getrecordsize(){
                 espacio+=sizeof(double);
                 break;
             case 3://Char
-                espacio+=campo.size;
+                espacio+=campo.size+1;
                 break;
             case 4://Varchar
                 espacio+=sizeof(int)+sizeof(int);
