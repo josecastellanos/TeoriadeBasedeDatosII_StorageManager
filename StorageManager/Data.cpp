@@ -506,7 +506,7 @@ void Data::updateRecord(Registro _new, unsigned int index)
                                 {
                                     varchar[i]='#';
                                 }
-                                varchar[i+1]='\0';
+                                varchar[i]='\0';
                             }
                             else
                             {
@@ -516,7 +516,7 @@ void Data::updateRecord(Registro _new, unsigned int index)
                                 {
                                     varchar[i]='#';
                                 }
-                                varchar[i+1]='\0';
+                                varchar[i]='\0';
                             }
 
                             vb.updateVarchar(varchar,pos);
